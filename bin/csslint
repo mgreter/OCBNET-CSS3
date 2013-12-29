@@ -76,6 +76,9 @@ printf "Too many selectors (%s)\n", scalar(@selectors) if scalar(@selectors) > 4
 # print final message
 print "completed csslint ", $ARGV[0], "\n";
 
+####################################################################################################
+####################################################################################################
+
 __END__
 
 =head1 NAME

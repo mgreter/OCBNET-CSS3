@@ -1,0 +1,236 @@
+#!/usr/bin/perl
+####################################################################################################
+# sass to scss syntax converter
+####################################################################################################
+
+use strict;
+use warnings;
+
+####################################################################################################
+# dependencies
+####################################################################################################
+
+# load modules
+use File::Slurp;
+use OCBNET::CSS3;
+
+# parse options
+use Pod::Usage;
+use Getopt::Long;
+use Cwd qw(realpath);
+use File::Basename;
+
+####################################################################################################
+# config variables
+####################################################################################################
+
+# init options
+my $pretty = 0;
+
+# define a sub to print out the version (minim behaviour of node.js blessc)
+sub version { print "sass2scss $OCBNET::CSS3::VERSION (SASS to SCSS Converter) [Perl]"; exit 0; };
+
+# get options
+GetOptions (
+	'help|h' => sub { pod2usage(1); },
+	'version|v' => \ &version,
+	'pretty+' => \ $pretty,
+);
+
+####################################################################################################
+# status variables
+####################################################################################################
+
+# whitespace buffer
+my $ws = '';
+
+# slurp next line
+my $comma = 0;
+
+# is in comment node
+my $comment = 0;
+
+# indentation tree
+my @indent = ('');
+
+####################################################################################################
+# helper
+####################################################################################################
+
+# flush whitespace
+# plus additional text
+# ***************************************************************************************
+sub flush
+{
+
+	# flush whitespace now
+	print $ws; $ws = '';
+
+	# process each line
+	foreach my $line (@_)
+	{
+		# remove newlines
+		my $rv = chomp $line;
+		# buffer newlines
+		$ws .= "\n" x $rv;
+		# print text
+		print $line;
+	}
+	# EO each line
+
+}
+# EO sub flush
+
+sub closer
+{
+	$pretty ? "\n" . $indent[-1] . "}" : " }"
+}
+
+sub opener
+{
+	$pretty > 1 ? "\n" . $indent[-1] . "{\n" : " {"
+}
+
+####################################################################################################
+# get input resource
+####################################################################################################
+
+# filehandle
+my $fh;
+
+# some minimalistic error handling
+die "sass2scss: no input file\n" unless $ARGV[0];
+
+# open filehandle
+if ($ARGV[0] ne '-')
+{
+
+	# open the passed filename
+	my $rv = open($fh, '<', $ARGV[0]);
+	# give an error message if file reading failed
+	die "sass2scss: error reading input file\nerror: $!" unless $rv;
+
+}
+# or use standard input
+else { $fh =  \*STDIN; }
+
+####################################################################################################
+# main process
+####################################################################################################
+
+# process standard input
+# ***************************************************************************************
+while (my $line = <>)
+{
+
+	# has only whitespace
+	if ($line =~ m/\A\s*\z/s)
+	{
+		# add whitespace
+		$ws .= $line;
+	}
+
+	# need more text
+	elsif ($comma)
+	{
+		# flush line
+		flush($line);
+		# check if we wait for more lines
+		# not sure if indent play any role
+		$comma = $line =~ m/\,\s*\z/s
+	}
+
+	# has a comma at end of line
+	elsif ($line =~ m/\A(\s*)/s)
+	{
+
+		# store the match
+		my $indent = $1;
+
+		# make sure we close every "higher" block
+		while (length($indent) < length($indent[-1]))
+		{
+			# close block
+			pop(@indent);
+			# print closer
+			if ($comment)
+			{ print " */"; }
+			else { print closer; }
+			# reset comment
+			$comment = 0;
+		}
+
+		# check again if this node is a comment node
+		$comment = 1 if $line =~ s/\A(\s*)\/[\/\*]/$1\/\*/s;
+
+		# current line is inside a new block
+		if (length($indent) > length($indent[-1]))
+		{
+			# print block opener
+			print opener unless $comment;
+			# add and open block
+			push(@indent, $indent);
+			# flish line
+			flush($line);
+		}
+		# otherwise flush line
+		else { flush($line); }
+
+		# check if next line is slurped
+		$comma = $line =~ m/,\s*\z/s;
+
+	}
+	# EO has indent
+
+}
+# EO each line
+
+# close all open blocks
+while (0 < length($indent[-1]))
+{
+	# close block
+	pop(@indent);
+	# print closer
+	if ($comment)
+	{ print " */"; }
+	else { print closer; }
+	# reset comment
+	$comment = 0;
+}
+
+# flush
+flush;
+
+####################################################################################################
+####################################################################################################
+
+__END__
+
+=head1 NAME
+
+sass2scss - SASS to SCSS Converter
+
+=head1 SYNOPSIS
+
+csslint [options] [ source | - ]
+
+ Options:
+   -v, --version      print version
+   -h, --help         print this help
+   -p, --pretty       pretty print the output
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-help>
+
+Print a brief help message with options and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> is a SASS to SCSS Converter
+
+=cut
