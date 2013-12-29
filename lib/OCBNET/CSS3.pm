@@ -17,57 +17,25 @@ use warnings;
 
 ####################################################################################################
 
+our @types;
+
+####################################################################################################
+
+use OCBNET::CSS3::Extended;
+use OCBNET::CSS3::Selector;
+use OCBNET::CSS3::Property;
+use OCBNET::CSS3::Stylesheet;
+use OCBNET::CSS3::Whitespace;
+use OCBNET::CSS3::Comments;
+use OCBNET::CSS3::Text;
+
+####################################################################################################
+
 use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::Regex::Colors;
 use OCBNET::CSS3::Regex::Numbers;
 use OCBNET::CSS3::Regex::Selectors;
-
-####################################################################################################
-
-# openers and closers for certain block type
-# ***************************************************************************************
-my %opener = ( '{' => '{', '[' => '[', '(' => '(', '\"' => '\"', '\'' => '\'' );
-my %closer = ( '{' => '}', '[' => ']', '(' => ')', '\"' => '\"', '\'' => '\'' );
-
-# declare regex to parse a block
-# with correct bracket counting
-# ***************************************************************************************
-my $re_bracket; $re_bracket = qr/
-	\{ # match opening bracket
-	(?: # inner block capture group
-		# allowd chars
-		[^\\\"\'\/{}]+ |
-		# escaped char
-		(?: \\ .)+ |
-		# comment or only a slash
-		(??{$re_comment}) |
-		# a string in delimiters
-		\' (??{$re_apo}) \' |
-		\" (??{$re_quot}) \" |
-		# recursive blocks
-		(??{$re_bracket})
-	)* # can be empty or repeat
-	\} # match closing bracket
-/x;
-
-# declare regex to parse a rule
-# optional brackets (ie. media query)
-# ***************************************************************************************
-my $re_statement; $re_statement = qr/
-	((?: # inner block capture group
-		# allowd chars
-		[^\\\"\'\/{};]+ |
-		# escaped char
-		(?: \\ .)+ |
-		# comment or only a slash
-		(??{$re_comment}) |
-		# a string in delimiters
-		\' (??{$re_apo}) \' |
-		\" (??{$re_quot}) \" |
-	)*) # can be empty or repeat
-	((??{$re_bracket})?) # optional
-	((?:\z|;)?) # match exit clause
-/x;
+use OCBNET::CSS3::Regex::Stylesheet;
 
 ####################################################################################################
 # is common base for all classes
@@ -79,7 +47,7 @@ sub new
 {
 
 	# package name
-	my ($pckg, $parent) = shift;
+	my ($pckg) = shift;
 
 	# create a new instance
 	my $self = {
@@ -131,16 +99,31 @@ sub parse
 		# check exit clause
 		last if $1 eq '';
 
+		# declare object
+		my $object;
+
 		# store the different parts from the match
 		my ($text, $scope, $suffix) = ($1, $2, $3);
 
-# can get the type:
-# extend => ^\@
-# selector => match selector
-# property => name and :
+		# copy text to code and uncomment it
+		my $code = $text; $code =~ s/$re_comment//g;
 
-		# create a new css object
-		my $object = new OCBNET::CSS3;
+		# dynamically find type
+		foreach my $type (@types)
+		{
+			# get options from type array
+			my ($regex, $pckg, $tst) = @{$type};
+			# skip if type does not match
+			next unless $code =~ m/$regex/s;
+			# call optional test if one is defined
+			next if $tst && ! $tst->($text, $scope);
+			# create new dynamic object
+			$object = $pckg->new; last;
+		}
+		# EO each type
+
+		# create object if no other type found
+		$object = new OCBNET::CSS3 unless $object;
 
 		# set to the parsed text
 		$object->text = $text;
@@ -197,7 +180,10 @@ sub render
 {
 
 	# get input arguments
-	my ($self, $comments) = @_;
+	my ($self, $comments, $indent) = @_;
+
+	# init default indent
+	$indent = 0 unless $indent;
 
 	# declare string
 	my $data = '';
@@ -206,12 +192,15 @@ sub render
 	if (defined $self->text)
 	{ $data .= $self->text; }
 
+	# print to debug the css "dom" tree
+	# print "  " x $indent, $self, "\n";
+
 	# add opener bracket if scope has been set
 	$data .= $opener{$self->bracket} if $self->bracket;
 
 	# render and add each children
 	foreach my $child (@{$self->children})
-	{ $data .= $child->render($comments); }
+	{ $data .= $child->render($comments, $indent + 1); }
 
 	# add closer bracket if scope has been set
 	$data .= $closer{$self->bracket} if $self->bracket;
