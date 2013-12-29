@@ -16,10 +16,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw(%opener %closer $re_statement); }
-
-# define our functions than can be exported
-BEGIN { our @EXPORT_OK = qw($re_bracket); }
+BEGIN { our @EXPORT = qw(%opener %closer $re_statement $re_bracket); }
 
 ####################################################################################################
 
@@ -36,7 +33,8 @@ our %closer = ( '{' => '}', '[' => ']', '(' => ')', '\"' => '\"', '\'' => '\'' )
 # declare regex to parse a block
 # with correct bracket counting
 # ***************************************************************************************
-our $re_bracket; $re_bracket = qr/
+our $re_bracket; $re_bracket =
+qr/
 	\{ # match opening bracket
 	(?: # inner block capture group
 		# allowd chars
@@ -45,33 +43,46 @@ our $re_bracket; $re_bracket = qr/
 		(?: \\ .)+ |
 		# comment or only a slash
 		(??{$re_comment}) |
-		# a string in delimiters
+		# a quoted string
 		\' (??{$re_apo}) \' |
 		\" (??{$re_quot}) \" |
 		# recursive blocks
 		(??{$re_bracket})
 	)* # can be empty or repeat
 	\} # match closing bracket
-/x;
+/xs;
 
 # declare regex to parse a rule
 # optional brackets (ie. media query)
 # ***************************************************************************************
-our $re_statement; $re_statement = qr/
-	((?: # inner block capture group
-		# allowd chars
-		[^\\\"\'\/{};]+ |
-		# escaped char
-		(?: \\ .)+ |
-		# comment or only a slash
-		(??{$re_comment}) |
-		# a string in delimiters
-		\' (??{$re_apo}) \' |
-		\" (??{$re_quot}) \" |
-	)*) # can be empty or repeat
-	((??{$re_bracket})?) # optional
-	((?:\z|;)?) # match exit clause
-/x;
+our $re_statement; $re_statement =
+qr/
+	(?:
+		# match single comments, or
+		(\s*(??{$re_comment})\s*) |
+		# .. capture complex text
+		((?:
+			# match comment after text
+			# before has already matched
+			(??{$re_comment})?
+			# capture any text
+			(?:
+				# allowd chars
+				[^\\\"\'\/{};]+ |
+				# escaped char
+				(?: \\ .)+ |
+				# a quoted string
+				\' (??{$re_apo}) \' |
+				\" (??{$re_quot}) \" |
+			)
+		# can repeat
+		)+)
+		# get optional scope
+		((??{$re_bracket})?)
+	)
+	# exit clause
+	( (?:\z|;+)? )
+/xs;
 
 ####################################################################################################
 ####################################################################################################

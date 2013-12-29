@@ -25,8 +25,9 @@ use OCBNET::CSS3::Regex::Comments;
 # add basic extended type with highest priority
 #**************************************************************************************************
 unshift @OCBNET::CSS3::types, [
-	qr/\A\s*$re_comment\s*\z/is,
-	'OCBNET::CSS3::Comment'
+	qr//is,
+	'OCBNET::CSS3::Comment',
+	sub { $_[0] =~ m/\A\s*$re_comment\s*\z/is }
 ];
 
 ####################################################################################################

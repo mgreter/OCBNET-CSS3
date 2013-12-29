@@ -24,7 +24,7 @@ $css->{'children'} = [];
 $code = '/* hello */;';
 $rv = $css->parse($code);
 is    ($rv,                        $css,         'parse returns ourself');
-is    ($css->children->[-1]->type, 'base',       'does not parse comments');
+is    ($css->children->[-1]->type, 'comment',    'upgrades to comment type');
 is    ($css->render,               $code,        'renders the same as parsed');
 is    ($css->clone(1)->render,     $code,        'clone renders the same as parsed');
 

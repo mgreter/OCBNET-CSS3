@@ -133,19 +133,18 @@ sub parse
 	# parse as much as possible
 	# a stricter version would replace the parsed
 	# code and check the final string to be empty
-	while ($text =~ m/$re_statement/g)
+	while ($text =~ s/\A$re_statement//s)
+	# while ($text =~ m/$re_statement/g)
 	{
-		# check exit clause
-		last if $1 eq '';
-
 		# declare object
 		my $object;
 
 		# store the different parts from the match
-		my ($text, $scope, $suffix) = ($1, $2, $3);
+		my $match = defined $1 ? $1 : $2;
+		my ($scope, $suffix) = ($3, $4);
 
 		# copy uncommented text
-		my $code = uncomment $text;
+		my $code = uncomment $match;
 
 		# dynamically find type
 		foreach my $type (@types)
@@ -155,7 +154,7 @@ sub parse
 			# skip if type does not match
 			next unless $code =~ m/$regex/s;
 			# call optional test if one is defined
-			next if $tst && ! $tst->($text, $scope);
+			next if $tst && ! $tst->($match, $scope);
 			# create new dynamic object
 			$object = $pckg->new; last;
 		}
@@ -165,7 +164,7 @@ sub parse
 		$object = new OCBNET::CSS3 unless $object;
 
 		# set the main text
-		$object->set($text);
+		$object->set($match);
 
 		# set to the parsed suffix
 		$object->suffix = $suffix;
@@ -182,8 +181,14 @@ sub parse
 		# add object to scope
 		$self->add($object);
 
+		# check exit clause
+		last if $text eq '';
+
 	}
 	# EO each statement
+
+	# assert that everything was parsed
+	die "parse error" unless $text eq '';
 
 	# instance
 	return $self;
