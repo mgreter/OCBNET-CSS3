@@ -11,6 +11,21 @@ use warnings;
 use File::Slurp;
 use OCBNET::CSS3;
 
+# parse options
+use Pod::Usage;
+use Getopt::Long;
+use Cwd qw(realpath);
+use File::Basename;
+
+# define a sub to print out the version (minim behaviour of node.js blessc)
+sub version { print "csslint $OCBNET::CSS3::VERSION (CSS Analyzer) [Perl]"; exit 0; };
+
+# get options
+GetOptions (
+	'help|h' => sub { pod2usage(1); },
+	'version|v' => \ &version,
+);
+
 # counters
 my @objects;
 my @imports;
@@ -18,6 +33,9 @@ my @selectors;
 
 # some minimalistic error handling
 die "csslint: no input file\n" unless $ARGV[0];
+
+# print final message
+print "starting csslint ", $ARGV[0], "\n";
 
 # read the passed filename (or read from standard input)
 my $code = $ARGV[0] ne '-' ? read_file($ARGV[0]) : join("", <>);
@@ -57,3 +75,33 @@ printf "Too many selectors (%s)\n", scalar(@selectors) if scalar(@selectors) > 4
 
 # print final message
 print "completed csslint ", $ARGV[0], "\n";
+
+__END__
+
+=head1 NAME
+
+csslint - CSS analyzer for IE limitiations
+
+=head1 SYNOPSIS
+
+csslint [options] [ source | - ]
+
+ Options:
+   -v, --version      print version
+   -h, --help         print this help
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-help>
+
+Print a brief help message with options and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> is a analyzer for IE limitiations
+
+=cut

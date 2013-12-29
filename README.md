@@ -13,15 +13,6 @@ strings correctly). I think many css processors and tools ignore these edge case
 built from ground up to actually be able to parse them correctly. The key base to this is a set of well
 tested regular expressions, which may be handy for other css related tasks.
 
-csslint
-=======
-
-Check the given file if it is within the IE limits (selectors and imports).
-
-```
-csslint [ source | - ]
-```
-
 blessc
 ======
 
@@ -41,3 +32,18 @@ blessc [options] [ source | - ] [destination]
    --no-imports       disable @import on stylesheets
    --no-cache-buster  turn off the cache buster
 ```
+
+csslint
+=======
+
+Check the given file if it is within the IE limits (selectors and imports).
+
+```
+csslint [options] [ source | - ]
+
+ Options:
+   -v, --version      print version
+   -h, --help         print this help
+
+```
+
