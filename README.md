@@ -14,6 +14,27 @@ strings correctly). I think many css processors and tools ignore these edge case
 built from ground up to actually be able to parse them correctly. The key base to this is a set of well
 tested regular expressions, which may be handy for other css related tasks.
 
+INSTALL
+=======
+
+Standard process for building & installing modules:
+
+```
+perl Build.PL
+./Build
+./Build test
+./Build install
+```
+
+Or, if you're on a platform (like DOS or Windows) that doesn't require the "./" notation, you can do this:
+
+```
+perl Build.PL
+Build
+Build test
+Build install
+```
+
 blessc
 ======
 
