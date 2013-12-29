@@ -75,7 +75,7 @@ sub clone
 {
 
 	# get passed arguments
-	my ($self, $deep) = shift;
+	my ($self, $deep) = @_;
 
 	# create an empty cloned object
 	my $clone = ref($self)->new;
@@ -84,6 +84,13 @@ sub clone
 	$clone->set($self->text);
 	$clone->suffix = $self->suffix;
 	$clone->bracket = $self->bracket;
+
+	# return now if deep no set
+	return $clone unless $deep;
+
+	# add a clone of each child to clone
+	foreach my $child (@{$self->children})
+	{ $clone->add($child->clone($deep)) }
 
 	# new instance
 	return $clone;
