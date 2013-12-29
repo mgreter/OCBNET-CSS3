@@ -63,6 +63,30 @@ sub new
 
 ####################################################################################################
 
+# create a cloned object
+# ***************************************************************************************
+sub clone
+{
+
+	# get passed arguments
+	my ($self, $deep) = shift;
+
+	# create an empty cloned object
+	my $clone = ref($self)->new;
+
+	# clone all basic values
+	$clone->set($self->text);
+	$clone->suffix = $self->suffix;
+	$clone->bracket = $self->bracket;
+
+	# new instance
+	return $clone;
+
+}
+# EO sub clone
+
+####################################################################################################
+
 # static getter (overwrite)
 # ***************************************************************************************
 sub type { return 'base' }
@@ -80,6 +104,7 @@ sub bracket : lvalue { $_[0]->{'bracket'} }
 
 # getter (set via reference)
 # ***************************************************************************************
+sub parent { $_[0]->{'parent'} }
 sub children { $_[0]->{'children'} }
 
 ####################################################################################################
@@ -147,6 +172,9 @@ sub parse
 	}
 	# EO each statement
 
+	# instance
+	return $self;
+
 }
 # EO sub parse
 
@@ -171,6 +199,26 @@ sub add
 
 }
 # EO sub add
+
+# prepend some children
+# ***************************************************************************************
+sub prepend
+{
+
+	# get input arguments
+	my ($self, @children) = @_;
+
+	# add passed children to our array
+	unshift @{$self->{'children'}}, @children;
+
+	# attach us as parent to all children
+	$_->{'parent'} = $self foreach @children;
+
+	# instance
+	return $self;
+
+}
+# EO sub prepend
 
 ####################################################################################################
 

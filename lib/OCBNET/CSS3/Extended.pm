@@ -32,7 +32,7 @@ use OCBNET::CSS3::Extended::Namespace;
 
 # add basic extended type with lowest priority
 #**************************************************************************************************
-unshift @OCBNET::CSS3::types, [
+push @OCBNET::CSS3::types, [
 	qr/\A\s*\@/is,
 	'OCBNET::CSS3::Extended',
 	sub { !! $_[1] }

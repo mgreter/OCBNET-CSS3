@@ -35,6 +35,9 @@ sub set
 	# get input arguments
 	my ($self, $text) = @_;
 
+	# call super class method
+	$self->SUPER::set($text);
+
 	# split the key and the value
 	# leave whitespace to save later
 	my ($key, $value) = split(':', $text, 2);
