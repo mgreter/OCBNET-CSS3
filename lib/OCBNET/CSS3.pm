@@ -4,13 +4,6 @@
 ####################################################################################################
 package OCBNET::CSS3;
 ####################################################################################################
-# common objects:
-#  - stylesheet
-#  - selectors
-#  - property
-#  - media queries
-#  - extended blocks
-####################################################################################################
 
 use strict;
 use warnings;
@@ -21,6 +14,7 @@ our @types;
 
 ####################################################################################################
 
+# load different types
 use OCBNET::CSS3::Text;
 use OCBNET::CSS3::Comments;
 use OCBNET::CSS3::Extended;
@@ -31,6 +25,7 @@ use OCBNET::CSS3::Whitespace;
 
 ####################################################################################################
 
+# load regular expressions
 use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::Regex::Colors;
 use OCBNET::CSS3::Regex::Numbers;
