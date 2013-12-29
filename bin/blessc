@@ -1,0 +1,148 @@
+#!/usr/bin/perl
+###################################################################################################
+# Copyright 2013/2014 by Marcel Greter
+# This file is part of OCBNET-CSS3 (GPL3)
+####################################################################################################
+
+use strict;
+use warnings;
+
+# load modules
+use File::Slurp;
+use OCBNET::CSS3;
+
+# counters
+my @imports;
+my @selectors;
+
+# some minimalistic error handling
+die "no input file defined" unless $ARGV[0];
+die "no output file defined" unless $ARGV[1];
+
+# read the passed filename
+my $code = read_file($ARGV[0]);
+
+# set the output path
+# will be reduced to path
+my $outpath = $ARGV[1];
+
+# parse for the file extension (to insert number)
+my $outext = $outpath =~ s/(\.[a-z]+)\z//i ? $1 : '';
+my $outfile = $outpath =~ s/([^\/\\]+)\z//i ? $1 : '';
+
+# create a new instance and parse the loaded code
+my $sheet = OCBNET::CSS3::Stylesheet->new->parse($code);
+
+# runs recursive
+sub blessc
+{
+
+	# get passed arguments
+	my ($node, $parent, $state) = @_;
+
+	# create the status array
+	# add more stylesheets as needed
+	$state = [ $node ] unless $state;
+
+	# process each child in current node
+	foreach my $child (@{$node->{'children'}})
+	{
+		# special handling for selectors
+		if ($child->type eq 'selector')
+		{
+
+			# get the additional selectors to add
+			my @additional = split(/,/, $child->text);
+
+			# check if we would exceed the ie limit if processing
+			if (scalar(@selectors) + scalar(@additional) > 4095)
+			{
+				# extend everything to a new stylesheet
+				my $extend = OCBNET::CSS3::Stylesheet->new;
+				# define variables to clone dom tree
+				my @tree; my $cur = $child->parent;
+				# process tree
+				while($cur)
+				{
+					# insert clone into tree array
+					unshift(@tree, $cur->clone);
+					# move up in dom tree
+					$cur = $cur->parent;
+				}
+				# add tree to new sheet
+				my $prev = $extend;
+				# process previous tree
+				foreach my $tree (@tree)
+				{
+					# connect new nodes
+					$prev->add($tree);
+					# move in dom tree
+					$prev = $tree;
+				}
+				# reset counter
+				@selectors = ();
+				# remember new sheet
+				push(@{$state}, $extend);
+				# reset pointer
+				$parent = $prev;
+			}
+			# EO exceed limit
+
+			# count additional selectors
+			push @selectors, @additional;
+
+		}
+		# EO is selector
+
+		# clone the current child
+		my $clone = $child->clone;
+		# call blessc recursively
+		blessc($child, $clone, $state);
+		# add clone to parent
+		$parent->add($clone);
+
+	}
+	# EO each children
+
+	# return all sheets
+	return @{$state};
+
+}
+# EO sub blessc
+
+# clone the top node
+my $clone = $sheet->clone;
+
+# start blessc on top node
+# returns a list of all sheets
+my @sheets = reverse blessc($sheet, $clone);
+
+# process resulting sheets in reverse
+for (my $i = $#sheets; $i != -1; $i --)
+{
+
+	# create the generated filename for this stylesheet
+	my $file = $i == 0 ? join("", $outpath, $outfile, $outext)
+		: join("", $outpath, $outfile, sprintf('.%02d', $i), $outext);
+
+	# write this stylesheet to the disk as is
+	write_file( $file, { binmode => ':raw' }, $sheets[$i]->render ) ;
+
+	# give a status message
+	printf "written %s\n", $file;
+
+	# stop here for last sheet
+	next if $i == 0;
+
+	# create a new import statement
+	my $import = OCBNET::CSS3::Extended::Import->new;
+	# set the import url to be inserted in previous sheet
+	$import->set(sprintf('@import url("%s")', $file));
+	# set suffix delimiter
+	$import->suffix = ';';
+
+	# prepend import to previous sheet
+	$sheets[$i-1]->prepend($import);
+
+}
+# EO each sheet

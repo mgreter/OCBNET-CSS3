@@ -11,3 +11,22 @@ Great care has been taken to parse everything correctly (like handling escaped c
 strings correctly). I think many css processors and tools ignore these edge cases. This module has been
 built from ground up to actually be able to parse them correctly. The key base to this is a set of well
 tested regular expressions, which may be handy for other css related tasks.
+
+csslint
+=======
+
+Check the given file if it is within the IE limits (selectors and imports).
+
+```
+csslint input.css
+```
+
+blessc
+======
+
+Rewrite the given input.css if it exceeds the IE limitations (only selectors). Adds imports and additional
+stylesheets. This has been inspired by http://blesscss.com/. But this version "should" handle nested blocks.
+
+```
+blessc input.css output.css
+```

@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+###################################################################################################
+# Copyright 2013/2014 by Marcel Greter
+# This file is part of OCBNET-CSS3 (GPL3)
+####################################################################################################
+
+use strict;
+use warnings;
+
+# load modules
+use File::Slurp;
+use OCBNET::CSS3;
+
+# counters
+my @objects;
+my @imports;
+my @selectors;
+
+# some minimalistic error handling
+die "no input file defined" unless $ARGV[0];
+
+# read the passed filename
+my $code = read_file($ARGV[0]);
+
+# create a new instance and parse the loaded code
+my $sheet = OCBNET::CSS3::Stylesheet->new->parse($code);
+
+# add first object
+push @objects, $sheet;
+
+# process as long as we have objects
+while (my $object = shift @objects)
+{
+	# process children array
+	if ($object->{'children'})
+	{
+		# add object to counter arrays
+		push @objects, @{$object->{'children'}};
+		push @imports, $object if $object->type eq 'import';
+		push @selectors, $object if $object->type eq 'selector';
+	}
+}
+
+# split imports and selectors by commas
+@imports = map { split /,/, $_->text } @imports;
+@selectors = map { split /,/, $_->text } @selectors;
+
+# KB 262161 outlines the maximum number of stylesheets
+# and rules supported by Internet Explorer 6 to 9.
+# - A sheet may contain up to 4095 rules
+# - A sheet may @import up to 31 sheets
+# - @import nesting supports up to 4 levels deep
+
+# print warnings about exceeded limits
+printf "Too many imports (%s)\n", scalar(@imports) if scalar(@imports) > 31;
+printf "Too many selectors (%s)\n", scalar(@selectors) if scalar(@selectors) > 4095;
+
+# print final message
+print "completed csslint ", $ARGV[0], "\n";
