@@ -3,6 +3,7 @@ OCBNET-CSS3
 
 Perl module for CSS3 parsing, manipulation and rendering. It does this by parsing the CSS into
 a DOM like structure. You then can use various methods to manipulate it and finally render it again.
+It should also be possible to use it as a base for an SCSS compiler implementation.
 
 Should be able to parse nearly any css based format (i.e. scss). We try to be as unstrict as possible
 when parsing css code and blocks. If the blocks are in a known format, the node/object will automatically
@@ -25,14 +26,13 @@ blessc [options] [ source | - ] [destination]
 ```
 
 ```
-Options:
-  -v, --version      print version
-  -h, --help         print this help
-  -f, --force        overwrite input file
-  -x, --compress     "minify" @import
-  --no-cleanup       don\'t remove old css file before overwriting
-  --no-imports       disable @import on stylesheets
-  --no-cache-buster  turn off the cache buster
+-v, --version      print version
+-h, --help         print this help
+-f, --force        overwrite input file
+-x, --compress     "minify" @import
+--no-cleanup       don\'t remove old css file before overwriting
+--no-imports       disable @import on stylesheets
+--no-cache-buster  turn off the cache buster
 ```
 
 csslint
@@ -45,8 +45,7 @@ csslint [options] [ source | - ]
 ```
 
 ```
-Options:
-  -v, --version      print version
-  -h, --help         print this help
+-v, --version      print version
+-h, --help         print this help
 ```
 
