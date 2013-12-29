@@ -217,7 +217,7 @@ csslint [options] [ source | - ]
  Options:
    -v, --version      print version
    -h, --help         print this help
-   -p, --pretty       pretty print the output
+   -p, --pretty       pretty print output
 
 =head1 OPTIONS
 

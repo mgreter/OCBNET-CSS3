@@ -70,3 +70,18 @@ csslint [options] [ source | - ]
 -h, --help         print this help
 ```
 
+sass2scss
+=========
+
+Converts old indented sass syntax to newer scss syntax
+
+```
+csslint [options] [ source | - ]
+```
+
+```
+-v, --version      print version
+-h, --help         print this help
+-p, --pretty       pretty print output
+```
+
