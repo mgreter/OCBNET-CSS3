@@ -20,7 +20,7 @@ sub type { return 'text' }
 
 # add basic extended type with highest priority
 #**************************************************************************************************
-unshift @OCBNET::CSS3::types, [
+push @OCBNET::CSS3::types, [
 	qr/\A.+\z/is,
 	'OCBNET::CSS3::Text'
 ];
