@@ -5,7 +5,9 @@
 package OCBNET::CSS3::Regex::Colors;
 ####################################################################################################
 # Attention: color are not uniquely mapped
-# from rgb to names (gray/gray IE problem)
+# from rgb to names (gray/gray IE problem).
+# Added a flag that indicates that a color
+# is just an alternative of another one.
 ####################################################################################################
 
 use strict;
@@ -35,7 +37,7 @@ our %color_base =
 	'black'   => ['#000000',   0,   0,   0],
 	'silver'  => ['#C0C0C0', 192, 192, 192],
 	'gray'    => ['#808080', 128, 128, 128],
-	'grey'    => ['#808080', 128, 128, 128],
+	'grey'    => ['#808080', 128, 128, 128, 1],
 	'white'   => ['#FFFFFF', 255, 255, 255],
 	'maroon'  => ['#800000', 128,   0,   0],
 	'red'     => ['#FF0000', 255,   0,   0],
@@ -81,7 +83,7 @@ our %color_ext =
 	'darkgoldenrod' =>        ['#b8860b', 184, 134,  11],
 	'darkgray' =>             ['#a9a9a9', 169, 169, 169],
 	'darkgreen' =>            ['#006400',   0, 100,   0],
-	'darkgrey' =>             ['#a9a9a9', 169, 169, 169],
+	'darkgrey' =>             ['#a9a9a9', 169, 169, 169, 1],
 	'darkkhaki' =>            ['#bdb76b', 189, 183, 107],
 	'darkmagenta' =>          ['#8b008b', 139,   0, 139],
 	'darkolivegreen' =>       ['#556b2f',  85, 107,  47],
@@ -92,13 +94,13 @@ our %color_ext =
 	'darkseagreen' =>         ['#8fbc8f', 143, 188, 143],
 	'darkslateblue' =>        ['#483d8b',  72,  61, 139],
 	'darkslategray' =>        ['#2f4f4f',  47,  79,  79],
-	'darkslategrey' =>        ['#2f4f4f',  47,  79,  79],
+	'darkslategrey' =>        ['#2f4f4f',  47,  79,  79, 1],
 	'darkturquoise' =>        ['#00ced1',   0, 206, 209],
 	'darkviolet' =>           ['#9400d3', 148,   0, 211],
 	'deeppink' =>             ['#ff1493', 255,  20, 147],
 	'deepskyblue' =>          ['#00bfff',   0, 191, 255],
 	'dimgray' =>              ['#696969', 105, 105, 105],
-	'dimgrey' =>              ['#696969', 105, 105, 105],
+	'dimgrey' =>              ['#696969', 105, 105, 105, 1],
 	'dodgerblue' =>           ['#1e90ff',  30, 144, 255],
 	'firebrick' =>            ['#b22222', 178,  34,  34],
 	'floralwhite' =>          ['#fffaf0', 255, 250, 240],
@@ -111,7 +113,7 @@ our %color_ext =
 	'gray' =>                 ['#808080', 128, 128, 128],
 	'green' =>                ['#008000',   0, 128,   0],
 	'greenyellow' =>          ['#adff2f', 173, 255,  47],
-	'grey' =>                 ['#808080', 128, 128, 128],
+	'grey' =>                 ['#808080', 128, 128, 128, 1],
 	'honeydew' =>             ['#f0fff0', 240, 255, 240],
 	'hotpink' =>              ['#ff69b4', 255, 105, 180],
 	'indianred' =>            ['#cd5c5c', 205,  92,  92],
@@ -128,13 +130,13 @@ our %color_ext =
 	'lightgoldenrodyellow' => ['#fafad2', 250, 250, 210],
 	'lightgray' =>            ['#d3d3d3', 211, 211, 211],
 	'lightgreen' =>           ['#90ee90', 144, 238, 144],
-	'lightgrey' =>            ['#d3d3d3', 211, 211, 211],
+	'lightgrey' =>            ['#d3d3d3', 211, 211, 211, 1],
 	'lightpink' =>            ['#ffb6c1', 255, 182, 193],
 	'lightsalmon' =>          ['#ffa07a', 255, 160, 122],
 	'lightseagreen' =>        ['#20b2aa',  32, 178, 170],
 	'lightskyblue' =>         ['#87cefa', 135, 206, 250],
 	'lightslategray' =>       ['#778899', 119, 136, 153],
-	'lightslategrey' =>       ['#778899', 119, 136, 153],
+	'lightslategrey' =>       ['#778899', 119, 136, 153, 1],
 	'lightsteelblue' =>       ['#b0c4de', 176, 196, 222],
 	'lightyellow' =>          ['#ffffe0', 255, 255, 224],
 	'lime' =>                 ['#00ff00',   0, 255,   0],
@@ -187,7 +189,7 @@ our %color_ext =
 	'skyblue' =>              ['#87ceeb', 135, 206, 235],
 	'slateblue' =>            ['#6a5acd', 106,  90, 205],
 	'slategray' =>            ['#708090', 112, 128, 144],
-	'slategrey' =>            ['#708090', 112, 128, 144],
+	'slategrey' =>            ['#708090', 112, 128, 144, 1],
 	'snow' =>                 ['#fffafa', 255, 250, 250],
 	'springgreen' =>          ['#00ff7f',   0, 255, 127],
 	'steelblue' =>            ['#4682b4',  70, 130, 180],
