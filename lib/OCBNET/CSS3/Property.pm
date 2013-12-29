@@ -75,6 +75,9 @@ sub render
 	# init default indent
 	$indent = 0 unless $indent;
 
+	# print to debug the css "dom" tree
+	# print "  " x $indent, $self, "\n";
+
 	# put back the original code
 	$code .= $self->{'whitespace'}->{'key-prefix'};
 	$code .= $self->{'key'};

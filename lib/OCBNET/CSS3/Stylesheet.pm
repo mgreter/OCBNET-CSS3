@@ -20,7 +20,7 @@ sub type { return 'sheet' }
 
 # add basic extended type with highest priority
 #**************************************************************************************************
-# push @OCBNET::CSS3::types, [
+# unshift @OCBNET::CSS3::types, [
 # 	qr/\A\z$/is,
 # 	'OCBNET::CSS3::Stylesheet',
 # 	sub { ! $_[1] }

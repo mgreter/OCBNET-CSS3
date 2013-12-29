@@ -20,7 +20,7 @@ sub type { return 'whitespace' }
 
 # add basic extended type with highest priority
 #**************************************************************************************************
-push @OCBNET::CSS3::types, [
+unshift @OCBNET::CSS3::types, [
 	qr/\A\s+\z/is,
 	'OCBNET::CSS3::Whitespace',
 	sub { ! $_[1] }

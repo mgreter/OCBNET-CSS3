@@ -21,13 +21,13 @@ our @types;
 
 ####################################################################################################
 
+use OCBNET::CSS3::Text;
+use OCBNET::CSS3::Comments;
 use OCBNET::CSS3::Extended;
 use OCBNET::CSS3::Selector;
 use OCBNET::CSS3::Property;
 use OCBNET::CSS3::Stylesheet;
 use OCBNET::CSS3::Whitespace;
-use OCBNET::CSS3::Comments;
-use OCBNET::CSS3::Text;
 
 ####################################################################################################
 
