@@ -2,7 +2,7 @@
 # Copyright 2013 by Marcel Greter
 # This file is part of Webmerge (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Regex::Base;
+package OCBNET::CSS3::Regex::Comments;
 ####################################################################################################
 
 use strict;
@@ -14,24 +14,33 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_apo $re_quot $re_identifier $re_vendors); }
+BEGIN { our @EXPORT = qw($re_comment uncomment); }
 
 ####################################################################################################
 # base regular expressions
 ####################################################################################################
 
-# match text in apos or quotes
-#**************************************************************************************************
-our $re_apo = qr/(?:[^\'\\]+|\\.)*/s;
-our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
+# regex found on the w3.org's css grammar page
+# ***************************************************************************************
+our $re_comment = qr/\/\*[^*]*\*+([^\/*][^*]*\*+)*\//;
 
-# match an identifier or name
-#**************************************************************************************************
-our $re_identifier = qr/[_a-zA-Z][_a-zA-Z0-9\-]*/;
+####################################################################################################
 
-# match specific vendors
-#**************************************************************************************************
-our $re_vendors = qr/(?:o|ms|moz|webkit)/i;
+# uncomment a text
+sub uncomment
+{
+
+	# get the text from args
+	my ($text) = join("", @_);
+
+	# remove all comments from text
+	$text =~ s/$re_comment//gm;
+
+	# return result
+	return $text;
+
+}
+# EO sub uncomment
 
 ####################################################################################################
 ####################################################################################################

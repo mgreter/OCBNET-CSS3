@@ -20,7 +20,7 @@ sub type { return 'text' }
 
 # load regex for comments
 #**************************************************************************************************
-use OCBNET::CSS3::Regex::Base qw($re_comment);
+use OCBNET::CSS3::Regex::Comments;
 
 # add basic extended type with highest priority
 #**************************************************************************************************

@@ -12,9 +12,84 @@ use warnings;
 use base 'OCBNET::CSS3';
 ####################################################################################################
 
+use OCBNET::CSS3::Regex::Comments;
+
+####################################################################################################
+
 # static getter
 #**************************************************************************************************
 sub type { return 'prop' }
+
+# advanced getters
+#**************************************************************************************************
+sub key { uncomment $_[0]->{'key'} }
+sub value { uncomment $_[0]->{'value'} }
+
+####################################################################################################
+
+# set the readed text
+# parse key and value
+sub set
+{
+
+	# get input arguments
+	my ($self, $text) = @_;
+
+	# split the key and the value
+	# leave whitespace to save later
+	my ($key, $value) = split(':', $text, 2);
+
+	# remove whitespace
+	my $whitespace =
+	{
+		'key-prefix' => $key =~ s/\A((?:\s+|$re_comment)+)//s ? $1 : '',
+		'key-postfix' => $key =~ s/\A((?:\s+|$re_comment)+)//s ? $1 : '',
+		'value-prefix' => $value =~ s/((?:\s+|$re_comment)+)\z//s ? $1 : '',
+		'value-postfix' => $value =~ s/((?:\s+|$re_comment)+)\z//s ? $1 : '',
+	};
+
+	# store whitespace for rendering
+	$self->{'whitespace'} = $whitespace;
+
+	# store key and value
+	$self->{'key'} = $key;
+	$self->{'value'} = $value;
+
+	# instance
+	return $self;
+
+}
+# EO sub set
+
+####################################################################################################
+
+sub render
+{
+
+	# get input arguments
+	my ($self, $comments, $indent) = @_;
+
+	# declare string
+	my $code = '';
+
+	# init default indent
+	$indent = 0 unless $indent;
+
+	# put back the original code
+	$code .= $self->{'whitespace'}->{'key-prefix'};
+	$code .= $self->{'key'};
+	$code .= $self->{'whitespace'}->{'key-postfix'};
+	$code .= ':';
+	$code .= $self->{'whitespace'}->{'value-prefix'};
+	$code .= $self->{'value'};
+	$code .= $self->{'whitespace'}->{'value-postfix'};
+	$code .= $self->suffix if $self->suffix;
+
+	# return code
+	return $code;
+
+}
+# EO sub render
 
 ####################################################################################################
 

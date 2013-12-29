@@ -34,6 +34,7 @@ use OCBNET::CSS3::Text;
 use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::Regex::Colors;
 use OCBNET::CSS3::Regex::Numbers;
+use OCBNET::CSS3::Regex::Comments;
 use OCBNET::CSS3::Regex::Selectors;
 use OCBNET::CSS3::Regex::Stylesheet;
 
@@ -70,6 +71,11 @@ sub new
 # static getter (overwrite)
 # ***************************************************************************************
 sub type { return 'base' }
+
+# main setter method
+# overwrite to parse object
+# ***************************************************************************************
+sub set { $_[0]->text = $_[1] }
 
 # setter and getter
 # ***************************************************************************************
@@ -125,8 +131,8 @@ sub parse
 		# create object if no other type found
 		$object = new OCBNET::CSS3 unless $object;
 
-		# set to the parsed text
-		$object->text = $text;
+		# set the main text
+		$object->set($text);
 
 		# set to the parsed suffix
 		$object->suffix = $suffix;
@@ -182,34 +188,34 @@ sub render
 	# get input arguments
 	my ($self, $comments, $indent) = @_;
 
+	# declare string
+	my $code = '';
+
 	# init default indent
 	$indent = 0 unless $indent;
 
-	# declare string
-	my $data = '';
-
-	# add data from instance
+	# add code from instance
 	if (defined $self->text)
-	{ $data .= $self->text; }
+	{ $code .= $self->text; }
 
 	# print to debug the css "dom" tree
 	# print "  " x $indent, $self, "\n";
 
 	# add opener bracket if scope has been set
-	$data .= $opener{$self->bracket} if $self->bracket;
+	$code .= $opener{$self->bracket} if $self->bracket;
 
 	# render and add each children
 	foreach my $child (@{$self->children})
-	{ $data .= $child->render($comments, $indent + 1); }
+	{ $code .= $child->render($comments, $indent + 1); }
 
 	# add closer bracket if scope has been set
-	$data .= $closer{$self->bracket} if $self->bracket;
+	$code .= $closer{$self->bracket} if $self->bracket;
 
 	# add object suffix if it has been set
-	$data .= $self->suffix if defined $self->suffix;
+	$code .= $self->suffix if defined $self->suffix;
 
 	# return string
-	return $data;
+	return $code;
 
 }
 # EO sub render
