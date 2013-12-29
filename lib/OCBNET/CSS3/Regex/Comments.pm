@@ -27,7 +27,7 @@ our $re_comment = qr/\/\*[^*]*\*+([^\/*][^*]*\*+)*\//;
 ####################################################################################################
 
 # uncomment a text
-sub uncomment
+sub uncomment ($)
 {
 
 	# get the text from args

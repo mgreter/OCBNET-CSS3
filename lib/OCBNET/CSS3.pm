@@ -106,8 +106,8 @@ sub parse
 		# store the different parts from the match
 		my ($text, $scope, $suffix) = ($1, $2, $3);
 
-		# copy text to code and uncomment it
-		my $code = $text; $code =~ s/$re_comment//g;
+		# copy uncommented text
+		my $code = uncomment $text;
 
 		# dynamically find type
 		foreach my $type (@types)
