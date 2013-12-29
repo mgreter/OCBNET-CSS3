@@ -17,10 +17,10 @@ my @imports;
 my @selectors;
 
 # some minimalistic error handling
-die "no input file defined" unless $ARGV[0];
+die "csslint: no input file\n" unless $ARGV[0];
 
-# read the passed filename
-my $code = read_file($ARGV[0]);
+# read the passed filename (or read from standard input)
+my $code = $ARGV[0] ne '-' ? read_file($ARGV[0]) : join("", <>);
 
 # create a new instance and parse the loaded code
 my $sheet = OCBNET::CSS3::Stylesheet->new->parse($code);

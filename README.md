@@ -19,7 +19,7 @@ csslint
 Check the given file if it is within the IE limits (selectors and imports).
 
 ```
-csslint input.css
+csslint [ source | - ]
 ```
 
 blessc
@@ -27,7 +27,17 @@ blessc
 
 Rewrite the given input.css if it exceeds the IE limitations (only selectors). Adds imports and additional
 stylesheets. This has been inspired by http://blesscss.com/. But this version "should" handle nested blocks.
+The utility tries to act as a drop in replacement (altough not tested on real examples).
 
 ```
-blessc input.css output.css
+blessc [options] [ source | - ] [destination]
+
+ Options:
+   -v, --version      print version
+   -h, --help         print this help
+   -f, --force        overwrite input file
+   -x, --compress     "minify" @import
+   --no-cleanup       don\'t remove old css file before overwriting
+   --no-imports       disable @import on stylesheets
+   --no-cache-buster  turn off the cache buster
 ```
