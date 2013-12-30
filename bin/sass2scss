@@ -157,12 +157,12 @@ while (my $line = <$fh>)
 		}
 
 		# check if current line starts a comment
-		if ($line =~ s/\A(\s*)\/[\/\*]/$1\/\*/s)
+		if ($line =~ s/\A(\s*)\/([\/\*])/$1\/\*/s)
 		{
 			# close previous comment
 			print " */" if $comment;
 			# set comment flag
-			$comment = 1;
+			$comment = $2;
 		}
 
 		# current line is inside a new block
@@ -177,6 +177,15 @@ while (my $line = <$fh>)
 		}
 		# otherwise flush line
 		else { flush($line); }
+
+		# is a one-line comment?
+		if ($comment eq '/')
+		{
+			# close this comment
+			print " */";
+			# unset flag
+			$comment = 0;
+		}
 
 		# check if next line is slurped
 		$comma = $line =~ m/,\s*\z/s;
