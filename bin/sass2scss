@@ -84,7 +84,7 @@ sub flush
 # functions to deliver scope delimiters
 # ***************************************************************************************
 sub closer { $pretty ? "\n" . $indent[-1] . "}" : " }" }
-sub opener { $pretty > 1 ? "\n" . $indent[-1] . "{\n" : " {" }
+sub opener { $pretty > 1 ? "\n" . $indent[-1] . "{" : " {" }
 
 ####################################################################################################
 # get input resource
@@ -156,13 +156,31 @@ while (my $line = <$fh>)
 			$comment = 0;
 		}
 
-		# current line is inside a new block
+		# special case for multiline comment, when the next
+		# line is on the same indentation as the actual comment
+		# I assume that this means we should close the comment node
+		if ($comment eq "*" && length($indent) == length($indent[-1]))
+		{
+			# close the comment node
+			# parse next as normal code
+			print " */"; $comment = 0;
+		}
+
+		# current line has more indentation
 		if (length($indent) > length($indent[-1]))
 		{
 			# print block opener
 			print opener unless $comment;
-			# add and open block
-			push(@indent, $indent);
+			# open new block if not in comment
+			push(@indent, $indent) unless $comment;
+			# open new block if comment is opening
+			# be smart and only require the same indentation
+			# level as the comment node itself, plus one char
+			push(@indent, $indent[-1] . ' ') if $comment eq "*";
+			# set comment to current indent
+			# multiline comments must be indented
+			# indicates multiline if not eq "*"
+			$comment = $indent if $comment;
 		}
 
 		# check if current line starts a comment
