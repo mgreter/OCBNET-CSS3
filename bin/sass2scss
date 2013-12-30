@@ -156,8 +156,14 @@ while (my $line = <$fh>)
 			$comment = 0;
 		}
 
-		# check again if this node is a comment node
-		$comment = 1 if $line =~ s/\A(\s*)\/[\/\*]/$1\/\*/s;
+		# check if current line starts a comment
+		if ($line =~ s/\A(\s*)\/[\/\*]/$1\/\*/s)
+		{
+			# close previous comment
+			print " */" if $comment;
+			# set comment flag
+			$comment = 1;
+		}
 
 		# current line is inside a new block
 		if (length($indent) > length($indent[-1]))
