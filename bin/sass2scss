@@ -51,8 +51,10 @@ my @indent = ('');
 # helper
 ####################################################################################################
 
-# flush whitespace
-# plus additional text
+# flush whitespace and
+# print additional text
+# but only print additional
+# chars and buffer whitespace
 # ***************************************************************************************
 sub flush
 {
@@ -133,11 +135,12 @@ while (my $line = <$fh>)
 		$comma = $line =~ m/\,\s*\z/s
 	}
 
-	# has a comma at end of line
+	# any line must now match this
+	# capture indent level of this line
 	elsif ($line =~ m/\A(\s*)/s)
 	{
 
-		# store the match
+		# store indent string
 		my $indent = $1;
 
 		# make sure we close every "higher" block
