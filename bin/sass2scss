@@ -205,7 +205,7 @@ while (my $line = <$fh>)
 		}
 
 		# check if next line is slurped
-		$comma = $line =~ m/,\s*\z/s;
+		$comma = $line =~ m/,\s*\z/s unless $comment;
 
 	}
 	# EO has indent
