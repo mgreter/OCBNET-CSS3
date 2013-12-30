@@ -156,6 +156,15 @@ while (my $line = <$fh>)
 			$comment = 0;
 		}
 
+		# current line is inside a new block
+		if (length($indent) > length($indent[-1]))
+		{
+			# print block opener
+			print opener unless $comment;
+			# add and open block
+			push(@indent, $indent);
+		}
+
 		# check if current line starts a comment
 		if ($line =~ s/\A(\s*)\/([\/\*])/$1\/\*/s)
 		{
@@ -165,18 +174,8 @@ while (my $line = <$fh>)
 			$comment = $2;
 		}
 
-		# current line is inside a new block
-		if (length($indent) > length($indent[-1]))
-		{
-			# print block opener
-			print opener unless $comment;
-			# add and open block
-			push(@indent, $indent);
-			# flish line
-			flush($line);
-		}
-		# otherwise flush line
-		else { flush($line); }
+		# flush line
+		flush($line);
 
 		# is a one-line comment?
 		if ($comment eq '/')
