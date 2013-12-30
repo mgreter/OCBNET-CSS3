@@ -188,6 +188,8 @@ while (my $line = <$fh>)
 		{
 			# close previous comment
 			print " */" if $comment;
+			# remove indentation from previous comment
+			pop @indent if $comment && $comment ne "*";
 			# set comment flag
 			$comment = $2;
 		}
