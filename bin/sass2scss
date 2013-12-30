@@ -154,7 +154,7 @@ while (my $line = <$fh>)
 		# current line has less or same indentation
 		elsif (length($indent) <= length($indent[-1]))
 		{
-			# print a semicolon if in slurp mode
+			# print a semicolon if not in slurp mode
 			print ";" unless $comment || $comma;
 		}
 
