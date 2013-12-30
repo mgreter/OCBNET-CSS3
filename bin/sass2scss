@@ -143,28 +143,28 @@ while (my $line = <$fh>)
 		# store indent string
 		my $indent = $1;
 
-		# special case for multiline comment, when the next
-		# line is on the same indentation as the actual comment
-		# I assume that this means we should close the comment node
-		if ($comment eq "*" && length($indent) == length($indent[-1]))
+		# was one-line comment
+		if ($comment eq '/')
 		{
-			# close the comment node
-			# parse next as normal code
-			print " */"; $comment = 0;
-		}
-
-		# is a one-line comment?
-		elsif ($comment eq '/')
-		{
-			# close this comment
+			# close comment
 			print " */";
 			# unset flag
 			$comment = 0;
 		}
-
-		# current line less or same more indentation
+		# special case for multiline comment, when the next
+		# line is on the same indentation as the actual comment
+		# I assume that this means we should close the comment node
+		elsif ($comment eq "*" && length($indent) == length($indent[-1]))
+		{
+			# close comment
+			print " */";
+			# unset flag
+			$comment = 0;
+		}
+		# current line has less or same indentation
 		elsif (length($indent) <= length($indent[-1]))
 		{
+			# print a semicolon if in slurp mode
 			print ";" unless $comment || $comma;
 		}
 
@@ -210,7 +210,6 @@ while (my $line = <$fh>)
 		}
 
 		# flush line
-
 		flush($line);
 
 		# check if next line is slurped
