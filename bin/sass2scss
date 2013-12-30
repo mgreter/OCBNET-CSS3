@@ -21,7 +21,7 @@ use Getopt::Long;
 # init options
 my $pretty = 0;
 
-# define a sub to print out the version (minim behaviour of node.js blessc)
+# define a sub to print out the version (mimic behaviour of node.js blessc)
 sub version { print "sass2scss 0.2.0 (SASS to SCSS Converter) [Perl]"; exit 0; };
 
 # get options

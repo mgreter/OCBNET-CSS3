@@ -17,7 +17,7 @@ use Getopt::Long;
 use Cwd qw(realpath);
 use File::Basename;
 
-# define a sub to print out the version (minim behaviour of node.js blessc)
+# define a sub to print out the version (minic behaviour of node.js blessc)
 sub version { print "csslint $OCBNET::CSS3::VERSION (CSS Analyzer) [Perl]"; exit 0; };
 
 # get options

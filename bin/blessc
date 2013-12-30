@@ -24,7 +24,7 @@ my $imports = 1;
 my $cleanup = 1;
 my $compress = 0;
 
-# define a sub to print out the version (minim behaviour of node.js blessc)
+# define a sub to print out the version (mimic behaviour of node.js blessc)
 sub version { print "blessc $OCBNET::CSS3::VERSION (CSS Post-Processor) [Perl]"; exit 0; };
 
 # get options
