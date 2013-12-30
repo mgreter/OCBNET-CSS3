@@ -125,16 +125,6 @@ while (my $line = <$fh>)
 		$ws .= $line;
 	}
 
-	# need more text
-	elsif ($comma)
-	{
-		# flush line
-		flush($line);
-		# check if we wait for more lines
-		# not sure if indent play any role
-		$comma = $line =~ m/\,\s*\z/s
-	}
-
 	# any line must now match this
 	# capture indent level of this line
 	elsif ($line =~ m/\A(\s*)/s)
