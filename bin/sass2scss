@@ -17,7 +17,6 @@ use OCBNET::CSS3;
 # parse options
 use Pod::Usage;
 use Getopt::Long;
-use Cwd qw(realpath);
 use File::Basename;
 
 ####################################################################################################
