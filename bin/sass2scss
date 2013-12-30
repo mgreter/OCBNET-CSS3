@@ -10,14 +10,9 @@ use warnings;
 # dependencies
 ####################################################################################################
 
-# load modules
-use File::Slurp;
-use OCBNET::CSS3;
-
 # parse options
 use Pod::Usage;
 use Getopt::Long;
-use File::Basename;
 
 ####################################################################################################
 # config variables
@@ -27,7 +22,7 @@ use File::Basename;
 my $pretty = 0;
 
 # define a sub to print out the version (minim behaviour of node.js blessc)
-sub version { print "sass2scss $OCBNET::CSS3::VERSION (SASS to SCSS Converter) [Perl]"; exit 0; };
+sub version { print "sass2scss 0.2.0 (SASS to SCSS Converter) [Perl]"; exit 0; };
 
 # get options
 GetOptions (
