@@ -66,7 +66,6 @@ my $process = sub
 	# list variable
 	# parse optional
 	my %longhands;
-	my @list;
 
 	# get input arguments
 	my ($key, $value) = @_;
@@ -90,19 +89,23 @@ my $process = sub
 			my $ordered = [ @{$matcher->{'ordered'} || []} ];
 			my $postfix = [ @{$matcher->{'postfix'} || []} ];
 
+			# create arrays for all longhands
+			$longhands{$_} = [] foreach @{$prefix};
+			$longhands{$_->[0]} = [] foreach @{$ordered};
+			$longhands{$_} = [] foreach @{$postfix};
+
 			# parse list
 			# exit if not
 			while (1)
 			{
 
 				# declare variables
-				my (%longhand, $prop);
-
+				my ($prop);
 
 				# set defaults for all optional longhands
-				$longhand{$_} = $default{$_} foreach @{$prefix};
-				$longhand{$_->[0]} = $default{$_->[0]} foreach @{$ordered};
-				$longhand{$_} = $default{$_} foreach @{$postfix};
+				push @{$longhands{$_}}, $default{$_} foreach @{$prefix};
+				push @{$longhands{$_->[0]}}, $default{$_->[0]} foreach @{$ordered};
+				push @{$longhands{$_}}, $default{$_} foreach @{$postfix};
 
 				# optional prefixes (can occur in any order)
 				for (my $i = 0; $i < scalar(@{$prefix}); $i++)
@@ -119,7 +122,7 @@ my $process = sub
 					if ($value =~ s/\A\s*($regex)\s*//s)
 					{
 						# matches this property
-						$longhand{$prop} = $1;
+						$longhands{$prop}->[-1] = $1;
 						# remove from search and
 						splice(@{$prefix}, $i, 1);
 						# restart loop
@@ -158,7 +161,7 @@ my $process = sub
 					if ($value =~ s/\A\s*($regex)\s*//s)
 					{
 						# matches this property
-						$longhand{$name} = $1;
+						$longhands{$name}->[-1] = $1;
 					}
 					# EO match regex
 
@@ -166,8 +169,9 @@ my $process = sub
 					# eval to another longhand
 					elsif (ref($alt) eq '')
 					{
-						# eval to other longhand
-						$longhand{$name} = $longhand{$alt};
+						# eval to another longhand property
+						# property may has been parsed already
+						$longhands{$name}->[-1] = $longhands{$alt}->[-1];
 					}
 
 				}
@@ -188,7 +192,7 @@ my $process = sub
 					if ($value =~ s/\A\s*($regex)\s*//s)
 					{
 						# matches this property
-						$longhand{$prop} = $1;
+						$longhands{$prop}->[-1] = $1;
 						# remove from search and
 						splice(@{$postfix}, $i, 1);
 						# restart loop
@@ -203,12 +207,9 @@ my $process = sub
 				# implement action to setup styles
 				#####################################################
 				print "x" x 40, "\n";
-				foreach my $key (keys %longhand)
-				{ printf "%s => %s\n", $key, $longhand{$key}; }
+				foreach my $key (keys %longhands)
+				{ printf "%s => %s\n", $key, $longhands{$key}; }
 				#####################################################
-
-				# store result to list
-				push @list, \%longhand;
 
 				# check if we should parse in list mode
 				# if we find a comma we will parse again
@@ -230,8 +231,8 @@ my $process = sub
 	}
 	# EO while matcher
 
-	# return result
-	return \ @list;
+	# return results
+	return \ %longhands;
 
 };
 # EO fn $process
