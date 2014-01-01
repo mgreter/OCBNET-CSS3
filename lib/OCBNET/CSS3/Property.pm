@@ -191,6 +191,7 @@ sub set
 				}
 
 			}
+			# EO each longhand
 
 			# optional postfixes (can occur in any order)
 			for (my $i = 0; $i < scalar(@{$postfix}); $i++)
@@ -216,10 +217,15 @@ sub set
 				# EO match regex
 
 			}
+			# EO each postfix
 
+			#####################################################
+			# implement action to setup styles
+			#####################################################
 			# print "x" x 40, "\n";
 			# foreach my $key (keys %longhand)
 			# { printf "%s => %s\n", $key, $longhand{$key}; }
+			#####################################################
 
 			# store result to list
 			push @list, \%longhand;
