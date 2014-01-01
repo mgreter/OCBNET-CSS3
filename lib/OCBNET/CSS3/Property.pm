@@ -82,17 +82,10 @@ my $process = sub
 		if (ref($matcher) eq 'HASH')
 		{
 
-			# get optional options from shorthand
-			# create a copy of the array, so we can
-			# manipulate them later for loop control
-			my $prefix = [ @{$matcher->{'prefix'} || []} ];
-			my $ordered = [ @{$matcher->{'ordered'} || []} ];
-			my $postfix = [ @{$matcher->{'postfix'} || []} ];
-
 			# create arrays for all longhands
-			$longhands{$_} = [] foreach @{$prefix};
-			$longhands{$_->[0]} = [] foreach @{$ordered};
-			$longhands{$_} = [] foreach @{$postfix};
+			$longhands{$_} = [] foreach @{$matcher->{'prefix'} || []};
+			$longhands{$_->[0]} = [] foreach @{$matcher->{'ordered'} || []};
+			$longhands{$_} = [] foreach @{$matcher->{'postfix'} || []};
 
 			# parse list
 			# exit if not
@@ -101,6 +94,13 @@ my $process = sub
 
 				# declare variables
 				my ($prop);
+
+				# get optional options from shorthand
+				# create a copy of the array, so we can
+				# manipulate them later for loop control
+				my $prefix = [ @{$matcher->{'prefix'} || []} ];
+				my $ordered = [ @{$matcher->{'ordered'} || []} ];
+				my $postfix = [ @{$matcher->{'postfix'} || []} ];
 
 				# set defaults for all optional longhands
 				push @{$longhands{$_}}, $default{$_} foreach @{$prefix};
@@ -203,14 +203,6 @@ my $process = sub
 				}
 				# EO each postfix
 
-				#####################################################
-				# implement action to setup styles
-				#####################################################
-				print "x" x 40, "\n";
-				foreach my $key (keys %longhands)
-				{ printf "%s => %s\n", $key, $longhands{$key}; }
-				#####################################################
-
 				# check if we should parse in list mode
 				# if we find a comma we will parse again
 				next if $list{$key} && $value =~ s/\A\s*,\s*//s;
@@ -230,6 +222,14 @@ my $process = sub
 
 	}
 	# EO while matcher
+
+	#####################################################
+	# implement action to setup styles
+	#####################################################
+	# print "x" x 40, "\n";
+	# foreach my $key (keys %longhands)
+	# { printf "%s => %s\n", $key, join(", ", @{$longhands{$key}}); }
+	#####################################################
 
 	# return results
 	return \ %longhands;
