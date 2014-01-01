@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_apo $re_quot $re_identifier $re_vendors); }
+BEGIN { our @EXPORT = qw($re_apo $re_quot $re_identifier $re_string $re_url $re_vendors); }
 
 ####################################################################################################
 # base regular expressions
@@ -27,11 +27,19 @@ our $re_quot = qr/(?:[^\"\\]+|\\.)*/s;
 
 # match an identifier or name
 #**************************************************************************************************
-our $re_identifier = qr/[_a-zA-Z][_a-zA-Z0-9\-]*/;
+our $re_identifier = qr/[_a-zA-Z][_a-zA-Z0-9\-]*/s;
+
+# match a text (can be identifier or quoted string)
+#**************************************************************************************************
+our $re_string = qr/(?:$re_identifier|\"$re_quot\"|\'$re_apo\')/is;
+
+# regular expression to match any url
+#**************************************************************************************************
+our $re_url = qr/url\((?:\'$re_apo\'|\"$re_quot\"|[^\)]*)\)/s;
 
 # match specific vendors
 #**************************************************************************************************
-our $re_vendors = qr/(?:o|ms|moz|webkit)/i;
+our $re_vendors = qr/(?:o|ms|moz|webkit)/is;
 
 ####################################################################################################
 ####################################################################################################

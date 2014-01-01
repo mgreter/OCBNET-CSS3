@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_number $re_percent $re_byte); }
+BEGIN { our @EXPORT = qw($re_number $re_percent $re_length $re_byte); }
 
 ####################################################################################################
 # base regular expressions
@@ -33,6 +33,10 @@ our $re_percent = qr/$re_number\%/s;
 # match a number from 0 to 255 (strict match)
 #**************************************************************************************************
 our $re_byte = qr/(?:0|[1-9]\d?|1\d{2}|2(?:[0-4]\d|5[0-5]))/s;
+
+# regular expression to match any length property
+#**************************************************************************************************
+our $re_length = qr/\b$re_number(?:em|ex|px|\%|in|cm|mm|pt|pc)?(?=\s|\b|\Z|;|,)/i;
 
 ####################################################################################################
 ####################################################################################################
