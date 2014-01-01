@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_comment uncomment); }
+BEGIN { our @EXPORT = qw($re_comment uncomment comments); }
 
 ####################################################################################################
 # base regular expressions
@@ -38,6 +38,30 @@ sub uncomment ($)
 
 	# return result
 	return $text;
+
+}
+# EO sub uncomment
+
+####################################################################################################
+
+# get comments
+sub comments ($)
+{
+
+	# collect comments
+	my (@comments);
+
+	# get the text from args
+	my ($text) = join("", @_);
+
+	# collect all comments inside the given text node
+	push @comments, $1 while $text =~ m/($re_comment)/gs;
+
+	# remove comment opener and closer from strings
+	s/(?:\A\s*\/+\*+\s*|\s*\*+\/+\s*\z)//g foreach @comments;
+
+	# return result
+	return @comments;
 
 }
 # EO sub uncomment
