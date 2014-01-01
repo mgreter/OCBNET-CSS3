@@ -37,12 +37,13 @@ our $re_bracket; $re_bracket =
 qr/
 	\{ # match opening bracket
 	(?: # inner block capture group
-		# allowd chars
-		[^\\\"\'\/{}]+ |
+		# match comment after text
+		# before has already matched
+		(??{$re_comment})?
+		# allowed chars
+		[^\\\"\'{}]+ |
 		# escaped char
 		(?: \\ .)+ |
-		# comment or only a slash
-		(??{$re_comment}) |
 		# a quoted string
 		\' (??{$re_apo}) \' |
 		\" (??{$re_quot}) \" |
@@ -67,8 +68,8 @@ qr/
 			(??{$re_comment})?
 			# capture any text
 			(?:
-				# allowd chars
-				[^\\\"\'\/{};]+ |
+				# allowed chars
+				[^\\\"\'{};]+ |
 				# escaped char
 				(?: \\ .)+ |
 				# a quoted string
