@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 29;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
@@ -58,6 +58,11 @@ my $code = <<EOF;
 	margin-top: 70px;
 }
 
+.test-07
+{
+	margin-right: 80px;
+}
+
 EOF
 
 $rv = $css->parse($code);
@@ -91,3 +96,8 @@ is    ($css->child(5)->style('margin-top'),    '70px',      'parse margin-top (s
 is    ($css->child(5)->style('margin-right'),  '11px',      'parse margin-right (inherit shorthand 1)');
 is    ($css->child(5)->style('margin-bottom'), '11px',      'parse margin-bottom (inherit shorthand 1)');
 is    ($css->child(5)->style('margin-left'),   '11px',      'parse margin-left (inherit shorthand 1)');
+
+is    ($css->child(6)->style('margin-top'),    undef,       'parse margin-top (nothing inherited)');
+is    ($css->child(6)->style('margin-right'),  '80px',      'parse margin-right (set via longhand)');
+is    ($css->child(6)->style('margin-bottom'), undef,       'parse margin-bottom (nothing inherited)');
+is    ($css->child(6)->style('margin-left'),   undef,       'parse margin-left (nothing inherited)');

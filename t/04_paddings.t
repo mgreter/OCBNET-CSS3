@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 29;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
@@ -58,6 +58,11 @@ my $code = <<EOF;
 	padding-top: 70px;
 }
 
+.test-07
+{
+	padding-right: 80px;
+}
+
 EOF
 
 $rv = $css->parse($code);
@@ -91,3 +96,8 @@ is    ($css->child(5)->style('padding-top'),    '70px',      'parse padding-top 
 is    ($css->child(5)->style('padding-right'),  '11px',      'parse padding-right (inherit shorthand 1)');
 is    ($css->child(5)->style('padding-bottom'), '11px',      'parse padding-bottom (inherit shorthand 1)');
 is    ($css->child(5)->style('padding-left'),   '11px',      'parse padding-left (inherit shorthand 1)');
+
+is    ($css->child(6)->style('padding-top'),    undef,       'parse padding-top (nothing inherited)');
+is    ($css->child(6)->style('padding-right'),  '80px',      'parse padding-right (set via longhand)');
+is    ($css->child(6)->style('padding-bottom'), undef,       'parse padding-bottom (nothing inherited)');
+is    ($css->child(6)->style('padding-left'),   undef,       'parse padding-left (nothing inherited)');
