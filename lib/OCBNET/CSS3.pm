@@ -19,6 +19,8 @@ our @types;
 
 ####################################################################################################
 
+# load other base classes
+use OCBNET::CSS3::Block;
 # load different types
 use OCBNET::CSS3::Comments;
 use OCBNET::CSS3::Extended;
@@ -163,6 +165,9 @@ sub parse
 		# create object if no other type found
 		$object = new OCBNET::CSS3 unless $object;
 
+		# add object to scope
+		$self->add($object);
+
 		# set the main text
 		$object->set($match);
 
@@ -177,9 +182,6 @@ sub parse
 
 		# parse scope (only if scope was found)
 		$object->parse($scope) if $object->bracket;
-
-		# add object to scope
-		$self->add($object);
 
 		# check exit clause
 		last if $text eq '';

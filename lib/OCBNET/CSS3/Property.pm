@@ -68,7 +68,7 @@ my $process = sub
 	my %longhands;
 
 	# get input arguments
-	my ($key, $value) = @_;
+	my ($key, $value, $styles) = @_;
 
 	# check if we have a matcher
 	if (exists $matcher{$key})
@@ -231,6 +231,15 @@ my $process = sub
 	# { printf "%s => %s\n", $key, join(", ", @{$longhands{$key}}); }
 	#####################################################
 
+	# check if hash has been passed
+	if ($styles)
+	{
+		# overwrite styles with longhands
+		foreach my $key (keys %longhands)
+		{ $styles->{$key} = $longhands{$key} }
+	}
+	# EO if styles
+
 	# return results
 	return \ %longhands;
 
@@ -275,10 +284,8 @@ sub set
 	$key = $self->key;
 	$value = $self->value;
 
-	# get the comments from the value
-	# my $comment = join(';', $self->comment);
-
-	$process->($key, $value);
+	# parse key/value pairs into parent styles
+	$process->($key, $value, $self->parent->styles);
 
 	# instance
 	return $self;
