@@ -10,6 +10,7 @@ use warnings;
 
 ####################################################################################################
 use base 'OCBNET::CSS3';
+use Scalar::Util 'blessed';
 ####################################################################################################
 
 use OCBNET::CSS3::Regex::Comments;
@@ -280,12 +281,14 @@ sub set
 	$self->{'key'} = $key;
 	$self->{'value'} = $value;
 
-	# uncomment key/value
-	$key = $self->key;
-	$value = $self->value;
-
-	# parse key/value pairs into parent styles
-	$process->($key, $value, $self->parent->styles);
+	# only parse if parent is a valid block
+	if ($self->parent && $self->parent->styles)
+	{
+		# uncomment key/value pair
+		$key = $self->key; $value = $self->value;
+		# parse key/value pairs into parent styles
+		$process->($key, $value, $self->parent->styles);
+	}
 
 	# instance
 	return $self;

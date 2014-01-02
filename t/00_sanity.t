@@ -6,9 +6,9 @@ use warnings;
 use Test::More tests => 26;
 BEGIN { use_ok('OCBNET::CSS3') };
 
-my $css = OCBNET::CSS3->new;
-my $block1 = OCBNET::CSS3->new;
-my $block2 = OCBNET::CSS3->new;
+my $css = OCBNET::CSS3::Stylesheet->new;
+my $block1 = OCBNET::CSS3::Selector->new;
+my $block2 = OCBNET::CSS3::Selector->new;
 
 $css->add($block1, $block2);
 
@@ -26,7 +26,7 @@ is    ($block2->parent,      $css,         'prepend connects parent');
 is    ($css->children->[0],  $block2,      'prepend unshifts children in array');
 is    ($css->children->[1],  $block1,      'prepend unshifts children in array');
 
-$css = OCBNET::CSS3->new;
+$css = OCBNET::CSS3::Stylesheet->new;
 
 my $code = '/* pre1 */ /* pre2 */ ke/* in key */y /* */ : /**/ va/* in value */lue; ;;;/* post1 */;/* post2 */';
 my $rv = $css->parse($code);
