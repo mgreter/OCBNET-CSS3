@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 26;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
@@ -35,6 +35,13 @@ my $code = <<EOF;
 	background: blue right bottom;
 }
 
+.test-04
+{
+	/* css-id: test-04; */
+	/* css-ref: test-03; */
+	background-color: rgba(1,2,3,.5), rgb(9,6,3);
+}
+
 EOF
 
 
@@ -60,4 +67,12 @@ is    ($css->child(2)->style('background-repeat'),     'repeat',     'parse back
 is    ($css->child(2)->style('background-position-y'), 'bottom',     'parse background-position-y (shorthand - wrong order)');
 is    ($css->child(2)->style('background-position-x'), 'right',      'parse background-position-x (shorthand - wrong order)');
 is    ($css->child(2)->style('background-attachment'), 'scroll',     'parse background-attachment (default)');
+
+is    ($css->child(3)->style('background-color', 0),   'rgba(1,2,3,.5)',  'parse background-color[0] (shorthand)');
+is    ($css->child(3)->style('background-color', 1),   'rgb(9,6,3)',      'parse background-color[1] (shorthand)');
+is    ($css->child(3)->style('background-image'),      'none',            'parse background-image (inherit from shorthand 3)');
+is    ($css->child(3)->style('background-repeat'),     'repeat',          'parse background-repeat (inherit from shorthand 3)');
+is    ($css->child(3)->style('background-position-y'), 'bottom',          'parse background-position-y (inherit from shorthand 3)');
+is    ($css->child(3)->style('background-position-x'), 'right',           'parse background-position-x (inherit from shorthand 3)');
+is    ($css->child(3)->style('background-attachment'), 'scroll',          'parse background-attachment (inherit from shorthand 3)');
 
