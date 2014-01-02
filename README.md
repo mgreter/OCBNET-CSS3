@@ -73,15 +73,16 @@ csslint [options] [ source | - ]
 sass2scss
 =========
 
-Converts old indented sass syntax to newer scss syntax
+Converts old indented sass syntax to newer scss syntax (writes to stdout).
 
 ```
-csslint [options] [ source | - ]
+sass2scss [options] [ source | - ]
 ```
 
 ```
 -v, --version      print version
 -h, --help         print this help
 -p, --pretty       pretty print output
+                   repeat for c block style
 ```
 
