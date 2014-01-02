@@ -7,8 +7,8 @@ use Test::More tests => 26;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $css = OCBNET::CSS3::Stylesheet->new;
-my $block1 = OCBNET::CSS3::Selector->new;
-my $block2 = OCBNET::CSS3::Selector->new;
+my $block1 = OCBNET::CSS3::DOM::Selector->new;
+my $block2 = OCBNET::CSS3::DOM::Selector->new;
 
 $css->add($block1, $block2);
 

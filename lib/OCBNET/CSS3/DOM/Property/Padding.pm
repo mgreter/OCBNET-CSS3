@@ -2,47 +2,45 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Comment::Options;
+package OCBNET::CSS3::DOM::Property::Padding;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-
-use OCBNET::CSS3::Regex::Base;
-
+# import regular expressions
 ####################################################################################################
 
-# plug into comment reading
-# parse all possible options
-sub reader
+use OCBNET::CSS3::Regex::Numbers;
+
+####################################################################################################
+# register longhand properties for padding
+####################################################################################################
+
+OCBNET::CSS3::DOM::Property::register('padding-top', $re_length, '0');
+OCBNET::CSS3::DOM::Property::register('padding-left', $re_length, '0');
+OCBNET::CSS3::DOM::Property::register('padding-right', $re_length, '0');
+OCBNET::CSS3::DOM::Property::register('padding-bottom', $re_length, '0');
+
+####################################################################################################
+# register shorthand property for padding
+####################################################################################################
+
+OCBNET::CSS3::DOM::Property::register('padding',
 {
-
-	# get input variables
-	my ($self, $text) = @_;
-
-	# trim the comment (remove opener/closer)
-	$text =~ s/(?:\A\s*\/+\*+|\*+\/+\s*\z)//gs;
-
-	# try to parse key/value pairs (pretty unstrict, but has loose syntax)
-	while ($text =~ m/(?:\A|;+)\s*($re_identifier)\s*\:\s*(.*?)\s*(?:\z|;+)/g)
-	{
-		if ($self->parent && $self->parent->options)
-		{ $self->parent->options->{$1} = [ split /\s*,\s*/, $2 ]; }
-	}
-
-	# instance
-	return $self
-
-}
-# EO sub reader
-
-####################################################################################################
-# register additional reader for comments
-####################################################################################################
-
-OCBNET::CSS3::Comment::register(\&reader);
+	'ordered' =>
+	# needed in order
+	[
+		# always needed
+		[ 'padding-top' ],
+		# additional optional values
+		# may evaluate to other value
+		[ 'padding-right', 'padding-top'],
+		[ 'padding-bottom', 'padding-top'],
+		[ 'padding-left', 'padding-right']
+	]
+});
 
 ####################################################################################################
 ####################################################################################################

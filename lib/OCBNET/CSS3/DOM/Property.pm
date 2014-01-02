@@ -2,7 +2,7 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Property;
+package OCBNET::CSS3::DOM::Property;
 ####################################################################################################
 
 use strict;
@@ -341,7 +341,7 @@ use OCBNET::CSS3::Regex::Base qw($re_identifier);
 #**************************************************************************************************
 unshift @OCBNET::CSS3::types, [
 	qr/\A\s*$re_identifier\s*\:/is,
-	'OCBNET::CSS3::Property',
+	'OCBNET::CSS3::DOM::Property',
 	sub { ! $_[1] }
 ];
 

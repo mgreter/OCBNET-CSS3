@@ -2,14 +2,14 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Selector;
+package OCBNET::CSS3::DOM::Selector;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-use base 'OCBNET::CSS3::Block';
+use base 'OCBNET::CSS3::DOM::Block';
 ####################################################################################################
 
 # static getter
@@ -26,7 +26,7 @@ use OCBNET::CSS3::Regex::Selectors qw($re_selector_rules);
 #**************************************************************************************************
 unshift @OCBNET::CSS3::types, [
 	qr/\A\s*$re_selector_rules/is,
-	'OCBNET::CSS3::Selector',
+	'OCBNET::CSS3::DOM::Selector',
 	sub { !! $_[1] }
 ];
 

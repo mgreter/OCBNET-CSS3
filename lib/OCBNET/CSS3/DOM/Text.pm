@@ -2,40 +2,27 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Extended;
+package OCBNET::CSS3::DOM::Text;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-use base 'OCBNET::CSS3::Block';
+use base 'OCBNET::CSS3';
 ####################################################################################################
 
 # static getter
 #**************************************************************************************************
-sub type { return 'extended' }
+sub type { return 'text' }
 
 ####################################################################################################
 
-use OCBNET::CSS3::Extended::Page;
-use OCBNET::CSS3::Extended::Media;
-use OCBNET::CSS3::Extended::Import;
-use OCBNET::CSS3::Extended::Charset;
-use OCBNET::CSS3::Extended::FontFace;
-use OCBNET::CSS3::Extended::Supports;
-use OCBNET::CSS3::Extended::Viewport;
-use OCBNET::CSS3::Extended::Keyframes;
-use OCBNET::CSS3::Extended::Namespace;
-
-####################################################################################################
-
-# add basic extended type with lowest priority
+# add basic extended type with highest priority
 #**************************************************************************************************
 push @OCBNET::CSS3::types, [
-	qr/\A\s*\@/is,
-	'OCBNET::CSS3::Extended',
-	sub { !! $_[1] }
+	qr/\A.+\z/is,
+	'OCBNET::CSS3::DOM::Text'
 ];
 
 ####################################################################################################

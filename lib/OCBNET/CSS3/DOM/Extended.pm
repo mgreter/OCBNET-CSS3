@@ -2,45 +2,41 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Property::Padding;
+package OCBNET::CSS3::DOM::Extended;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-# import regular expressions
+use base 'OCBNET::CSS3::DOM::Block';
 ####################################################################################################
 
-use OCBNET::CSS3::Regex::Numbers;
+# static getter
+#**************************************************************************************************
+sub type { return 'extended' }
 
 ####################################################################################################
-# register longhand properties for padding
+
+use OCBNET::CSS3::DOM::Extended::Page;
+use OCBNET::CSS3::DOM::Extended::Media;
+use OCBNET::CSS3::DOM::Extended::Import;
+use OCBNET::CSS3::DOM::Extended::Charset;
+use OCBNET::CSS3::DOM::Extended::FontFace;
+use OCBNET::CSS3::DOM::Extended::Supports;
+use OCBNET::CSS3::DOM::Extended::Viewport;
+use OCBNET::CSS3::DOM::Extended::Keyframes;
+use OCBNET::CSS3::DOM::Extended::Namespace;
+
 ####################################################################################################
 
-OCBNET::CSS3::Property::register('padding-top', $re_length, '0');
-OCBNET::CSS3::Property::register('padding-left', $re_length, '0');
-OCBNET::CSS3::Property::register('padding-right', $re_length, '0');
-OCBNET::CSS3::Property::register('padding-bottom', $re_length, '0');
-
-####################################################################################################
-# register shorthand property for padding
-####################################################################################################
-
-OCBNET::CSS3::Property::register('padding',
-{
-	'ordered' =>
-	# needed in order
-	[
-		# always needed
-		[ 'padding-top' ],
-		# additional optional values
-		# may evaluate to other value
-		[ 'padding-right', 'padding-top'],
-		[ 'padding-bottom', 'padding-top'],
-		[ 'padding-left', 'padding-right']
-	]
-});
+# add basic extended type with lowest priority
+#**************************************************************************************************
+push @OCBNET::CSS3::types, [
+	qr/\A\s*\@/is,
+	'OCBNET::CSS3::DOM::Extended',
+	sub { !! $_[1] }
+];
 
 ####################################################################################################
 ####################################################################################################

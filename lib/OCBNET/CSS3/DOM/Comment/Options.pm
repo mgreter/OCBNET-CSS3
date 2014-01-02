@@ -2,29 +2,47 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Whitespace;
+package OCBNET::CSS3::DOM::Comment::Options;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-use base 'OCBNET::CSS3';
-####################################################################################################
 
-# static getter
-#**************************************************************************************************
-sub type { return 'whitespace' }
+use OCBNET::CSS3::Regex::Base;
 
 ####################################################################################################
 
-# add basic extended type with highest priority
-#**************************************************************************************************
-unshift @OCBNET::CSS3::types, [
-	qr//is,
-	'OCBNET::CSS3::Whitespace',
-	sub { $_[0] =~ m/\A\s+\z/is }
-];
+# plug into comment reading
+# parse all possible options
+sub reader
+{
+
+	# get input variables
+	my ($self, $text) = @_;
+
+	# trim the comment (remove opener/closer)
+	$text =~ s/(?:\A\s*\/+\*+|\*+\/+\s*\z)//gs;
+
+	# try to parse key/value pairs (pretty unstrict, but has loose syntax)
+	while ($text =~ m/(?:\A|;+)\s*($re_identifier)\s*\:\s*(.*?)\s*(?:\z|;+)/g)
+	{
+		if ($self->parent && $self->parent->options)
+		{ $self->parent->options->{$1} = [ split /\s*,\s*/, $2 ]; }
+	}
+
+	# instance
+	return $self
+
+}
+# EO sub reader
+
+####################################################################################################
+# register additional reader for comments
+####################################################################################################
+
+OCBNET::CSS3::DOM::Comment::register(\&reader);
 
 ####################################################################################################
 ####################################################################################################

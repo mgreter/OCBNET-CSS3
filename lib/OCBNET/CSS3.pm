@@ -20,16 +20,16 @@ our @types;
 ####################################################################################################
 
 # load other base classes
-use OCBNET::CSS3::Block;
-# load different types
-use OCBNET::CSS3::Comment;
-use OCBNET::CSS3::Extended;
-use OCBNET::CSS3::Selector;
-use OCBNET::CSS3::Property;
 use OCBNET::CSS3::Stylesheet;
-use OCBNET::CSS3::Whitespace;
+use OCBNET::CSS3::DOM::Block;
+# load different types
+use OCBNET::CSS3::DOM::Comment;
+use OCBNET::CSS3::DOM::Extended;
+use OCBNET::CSS3::DOM::Selector;
+use OCBNET::CSS3::DOM::Property;
+use OCBNET::CSS3::DOM::Whitespace;
 # text is the last order
-use OCBNET::CSS3::Text;
+use OCBNET::CSS3::DOM::Text;
 
 ####################################################################################################
 

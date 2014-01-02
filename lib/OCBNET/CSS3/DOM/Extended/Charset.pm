@@ -2,19 +2,19 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Extended::Namespace;
+package OCBNET::CSS3::DOM::Extended::Charset;
 ####################################################################################################
 
 use strict;
 use warnings;
 
 ####################################################################################################
-use base 'OCBNET::CSS3::Extended';
+use base 'OCBNET::CSS3::DOM::Extended';
 ####################################################################################################
 
 # static getter
 #**************************************************************************************************
-sub type { return 'namespace' }
+sub type { return 'charset' }
 
 ####################################################################################################
 
@@ -25,8 +25,8 @@ use OCBNET::CSS3::Regex::Base qw($re_vendors);
 # add basic extended type with highest priority
 #**************************************************************************************************
 unshift @OCBNET::CSS3::types, [
-	qr/\A\s*\@(?:-$re_vendors-)?namespace/is,
-	'OCBNET::CSS3::Extended::Namespace'
+	qr/\A\s*\@(?:-$re_vendors-)?charset/is,
+	'OCBNET::CSS3::DOM::Extended::Charset'
 ];
 
 ####################################################################################################
