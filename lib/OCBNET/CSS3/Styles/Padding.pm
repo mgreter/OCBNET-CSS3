@@ -2,7 +2,7 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::DOM::Property::Margin;
+package OCBNET::CSS3::Styles::Padding;
 ####################################################################################################
 
 use strict;
@@ -15,30 +15,30 @@ use warnings;
 use OCBNET::CSS3::Regex::Numbers;
 
 ####################################################################################################
-# register longhand properties for margin
+# register longhand properties for padding
 ####################################################################################################
 
-OCBNET::CSS3::DOM::Property::register('margin-top', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('margin-left', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('margin-right', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('margin-bottom', $re_length, '0');
+OCBNET::CSS3::Styles::register('padding-top', $re_length, '0');
+OCBNET::CSS3::Styles::register('padding-left', $re_length, '0');
+OCBNET::CSS3::Styles::register('padding-right', $re_length, '0');
+OCBNET::CSS3::Styles::register('padding-bottom', $re_length, '0');
 
 ####################################################################################################
-# register shorthand property for margin
+# register shorthand property for padding
 ####################################################################################################
 
-OCBNET::CSS3::DOM::Property::register('margin',
+OCBNET::CSS3::Styles::register('padding',
 {
 	'ordered' =>
 	# needed in order
 	[
 		# always needed
-		[ 'margin-top' ],
+		[ 'padding-top' ],
 		# additional optional values
 		# may evaluate to other value
-		[ 'margin-right', 'margin-top'],
-		[ 'margin-bottom', 'margin-top'],
-		[ 'margin-left', 'margin-right']
+		[ 'padding-right', 'padding-top'],
+		[ 'padding-bottom', 'padding-top'],
+		[ 'padding-left', 'padding-right']
 	]
 });
 

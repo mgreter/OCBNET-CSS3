@@ -2,7 +2,7 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::DOM::Property::Padding;
+package OCBNET::CSS3::Styles::Margin;
 ####################################################################################################
 
 use strict;
@@ -15,30 +15,30 @@ use warnings;
 use OCBNET::CSS3::Regex::Numbers;
 
 ####################################################################################################
-# register longhand properties for padding
+# register longhand properties for margin
 ####################################################################################################
 
-OCBNET::CSS3::DOM::Property::register('padding-top', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('padding-left', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('padding-right', $re_length, '0');
-OCBNET::CSS3::DOM::Property::register('padding-bottom', $re_length, '0');
+OCBNET::CSS3::Styles::register('margin-top', $re_length, '0');
+OCBNET::CSS3::Styles::register('margin-left', $re_length, '0');
+OCBNET::CSS3::Styles::register('margin-right', $re_length, '0');
+OCBNET::CSS3::Styles::register('margin-bottom', $re_length, '0');
 
 ####################################################################################################
-# register shorthand property for padding
+# register shorthand property for margin
 ####################################################################################################
 
-OCBNET::CSS3::DOM::Property::register('padding',
+OCBNET::CSS3::Styles::register('margin',
 {
 	'ordered' =>
 	# needed in order
 	[
 		# always needed
-		[ 'padding-top' ],
+		[ 'margin-top' ],
 		# additional optional values
 		# may evaluate to other value
-		[ 'padding-right', 'padding-top'],
-		[ 'padding-bottom', 'padding-top'],
-		[ 'padding-left', 'padding-right']
+		[ 'margin-right', 'margin-top'],
+		[ 'margin-bottom', 'margin-top'],
+		[ 'margin-left', 'margin-right']
 	]
 });
 

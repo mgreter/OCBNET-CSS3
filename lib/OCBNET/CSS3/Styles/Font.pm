@@ -22,7 +22,7 @@
 # but the complete value may be set to inherit
 # size fallowed by a slash mush have line-height
 ####################################################################################################
-package OCBNET::CSS3::DOM::Property::Font;
+package OCBNET::CSS3::Styles::Font;
 ####################################################################################################
 
 use strict;
@@ -38,17 +38,17 @@ use OCBNET::CSS3::Regex::Numbers;
 # register longhand properties for fonts
 ####################################################################################################
 
-OCBNET::CSS3::DOM::Property::register('font-style', qr/(?:normal|italic|oblique)/is, 'normal');
-OCBNET::CSS3::DOM::Property::register('font-variant', qr/(?:normal|small-caps)/is, 'normal');
-OCBNET::CSS3::DOM::Property::register('font-weight', qr/(?:normal|bold|bolder|lighter|[1-9]00)/is, 'normal');
-OCBNET::CSS3::DOM::Property::register('font-size', qr/(?:$re_length|$re_percent|smaller|larger|(?:xx?-)?(?:small|large))/is, 'inherit');
-OCBNET::CSS3::DOM::Property::register('line-height', qr/(?:$re_length|$re_percent|inherit)/is, 'normal');
-OCBNET::CSS3::DOM::Property::register('font-family', qr/(?:$re_string)(?:\s*,\s*$re_string)*/is, 'inherit');
+OCBNET::CSS3::Styles::register('font-style', qr/(?:normal|italic|oblique)/is, 'normal');
+OCBNET::CSS3::Styles::register('font-variant', qr/(?:normal|small-caps)/is, 'normal');
+OCBNET::CSS3::Styles::register('font-weight', qr/(?:normal|bold|bolder|lighter|[1-9]00)/is, 'normal');
+OCBNET::CSS3::Styles::register('font-size', qr/(?:$re_length|$re_percent|smaller|larger|(?:xx?-)?(?:small|large))/is, 'inherit');
+OCBNET::CSS3::Styles::register('line-height', qr/(?:$re_length|$re_percent|inherit)/is, 'normal');
+OCBNET::CSS3::Styles::register('font-family', qr/(?:$re_string)(?:\s*,\s*$re_string)*/is, 'inherit');
 
 ####################################################################################################
 
 # register shorthand property for font
-OCBNET::CSS3::DOM::Property::register('font',
+OCBNET::CSS3::Styles::register('font',
 {
 	# optional styes
 	# prefered order

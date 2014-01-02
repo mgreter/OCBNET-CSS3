@@ -12,6 +12,7 @@ use warnings;
 
 ####################################################################################################
 use base 'OCBNET::CSS3';
+use OCBNET::CSS3::Styles;
 ####################################################################################################
 
 # create a new object
@@ -26,8 +27,8 @@ sub new
 	my $self = $pckg->SUPER::new;
 
 	# store only longhands
-	$self->{'style'} = {};
-	$self->{'option'} = {};
+	$self->{'style'} = OCBNET::CSS3::Styles->new;
+	$self->{'option'} = OCBNET::CSS3::Styles->new;
 
 	# instance
 	return $self;
