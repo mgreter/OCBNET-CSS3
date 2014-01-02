@@ -22,7 +22,7 @@ our @types;
 # load other base classes
 use OCBNET::CSS3::Block;
 # load different types
-use OCBNET::CSS3::Comments;
+use OCBNET::CSS3::Comment;
 use OCBNET::CSS3::Extended;
 use OCBNET::CSS3::Selector;
 use OCBNET::CSS3::Property;
