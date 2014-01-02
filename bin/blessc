@@ -173,7 +173,7 @@ for (my $i = $#sheets; $i != -1; $i --)
 	next if $i == 0 || ! $imports;
 
 	# create a new import statement
-	my $import = OCBNET::CSS3::Extended::Import->new;
+	my $import = OCBNET::CSS3::DOM::Extended::Import->new;
 	# set the import url to be inserted in previous sheet
 	$import->set(sprintf('@import url("%s")', $file . $cbuster));
 	# set suffix delimiter (maybe save newline)
