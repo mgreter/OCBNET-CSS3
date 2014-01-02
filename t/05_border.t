@@ -37,8 +37,8 @@ my $code = <<EOF;
 	border: 5px;
 }
 
-
 EOF
+
 
 $rv = $css->parse($code);
 

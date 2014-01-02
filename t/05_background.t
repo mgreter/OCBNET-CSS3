@@ -35,8 +35,8 @@ my $code = <<EOF;
 	background: blue right bottom;
 }
 
-
 EOF
+
 
 $rv = $css->parse($code);
 
