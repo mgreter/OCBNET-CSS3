@@ -81,6 +81,13 @@ sub set
 		# might be a shorthand value
 		my $matcher = $matcher{$key};
 
+		# rewrite longhand option
+		if (ref($matcher) eq 'Regexp')
+		{
+			# must match that single keys regex
+			$matcher = { 'ordered' => [ [ $key ] ] };
+		}
+
 		# matcher is a shorthand
 		if (ref($matcher) eq 'HASH')
 		{
