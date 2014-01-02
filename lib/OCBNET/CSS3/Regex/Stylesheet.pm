@@ -41,7 +41,7 @@ qr/
 		# before has already matched
 		(?:(??{$re_comment})|\/)?
 		# allowed chars
-		[^\\\"\'\/{}]+ |
+		[^\\\"\'{}]+ |
 		# escaped char
 		(?: \\ .)+ |
 		# a quoted string
