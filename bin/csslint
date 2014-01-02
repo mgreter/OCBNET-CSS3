@@ -11,6 +11,9 @@ use warnings;
 use File::Slurp;
 use OCBNET::CSS3;
 
+# print more info
+my $verbose = 0;
+
 # parse options
 use Pod::Usage;
 use Getopt::Long;
@@ -24,6 +27,7 @@ sub version { print "csslint $OCBNET::CSS3::VERSION (CSS Analyzer) [Perl]"; exit
 GetOptions (
 	'help|h' => sub { pod2usage(1); },
 	'version|v' => \ &version,
+	'verbose!' => \ $verbose,
 );
 
 # counters
@@ -72,6 +76,8 @@ while (my $object = shift @objects)
 # print warnings about exceeded limits
 printf "Too many imports (%s)\n", scalar(@imports) if scalar(@imports) > 31;
 printf "Too many selectors (%s)\n", scalar(@selectors) if scalar(@selectors) > 4095;
+printf "Has %s imports\n", scalar(@imports) if $verbose && scalar(@imports) <= 31;
+printf "Has %s selectors\n", scalar(@selectors) if $verbose && scalar(@selectors) <= 4095;
 
 # print final message
 print "completed csslint ", $ARGV[0], "\n";
@@ -92,6 +98,7 @@ csslint [options] [ source | - ]
  Options:
    -v, --version      print version
    -h, --help         print this help
+       --verbose      print import/selector count
 
 =head1 OPTIONS
 
