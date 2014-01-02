@@ -134,6 +134,9 @@ sub set
 					# might be a shorthand value
 					my $regex = $matcher{$prop};
 
+					if (ref($regex) eq 'HASH')
+					{ $regex = $regex->{'matcher'} }
+
 					# test if we have found this property
 					if ($value =~ s/\A\s*($regex)\s*//s)
 					{
@@ -181,12 +184,11 @@ sub set
 					}
 					# EO match regex
 
-					# has other alternative
-					# eval to another longhand
-					elsif (ref($alt) eq '')
+					# has another alternative (string)
+					elsif (defined $alt && ref($alt) eq '')
 					{
 						# eval to another longhand property
-						# property may has been parsed already
+						# this property should be parsed already
 						$longhands{$name}->[-1] = $longhands{$alt}->[-1];
 					}
 
@@ -239,18 +241,6 @@ sub set
 	}
 	# EO while matcher
 
-	#####################################################
-	# implement action to setup styles
-	#####################################################
-	# print "x" x 40, "\n";
-	# foreach my $key (keys %longhands)
-	# { printf "%s => %s\n", $key, join(", ", @{$longhands{$key}}); }
-	#####################################################
-
-	# overwrite styles with longhands
-	foreach my $key (keys %longhands)
-	{ $self->{$key} = $longhands{$key} }
-
 	# check if we have a new id
 	if ($longhands{'css-id'})
 	{
@@ -258,6 +248,33 @@ sub set
 		foreach my $id (@{$longhands{'css-id'}})
 		{ $self->node->root->{'ids'}->{$id} = $self->node; }
 	}
+	# EO if css-id
+
+	#####################################################
+	# implement action to setup styles
+	#####################################################
+	# print "x" x 40, "\n";
+	# foreach my $name (keys %longhands)
+	# { printf "%s => %s\n", $name, join(", ", @{$longhands{$name}}); }
+	#####################################################
+
+	# overwrite styles with longhands
+	foreach my $name (keys %longhands)
+	{
+		# check if key is another shorthand
+		if (ref($matcher{$name}) eq 'HASH')
+		{
+			# pass this "shorthand" value to parse longhands
+			$self->set($name, join(',', @{$longhands{$name}}));
+		}
+		# this key is finally a longhand
+		elsif (ref($matcher{$name}) eq 'Regexp')
+		{
+			# just store the parsed value
+			$self->{$name} = $longhands{$name};
+		}
+	}
+	# EO each longhand
 
 	# return results
 	return \ %longhands;
