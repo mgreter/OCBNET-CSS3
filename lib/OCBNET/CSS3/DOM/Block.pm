@@ -96,8 +96,8 @@ sub option
 	my ($self, $key, $idx) = @_;
 
 	# check if found in current styles
-	if (exists $self->{'style'}->{$key}->[$idx || 0])
-	{ return $self->{'style'}->{$key}->[$idx || 0]; }
+	if (exists $self->{'option'}->{$key}->[$idx || 0])
+	{ return $self->{'option'}->{$key}->[$idx || 0]; }
 
 	# do not go recursive on certain keys
 	return undef if $key eq 'css-ref';
