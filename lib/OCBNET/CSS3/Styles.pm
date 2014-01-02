@@ -48,16 +48,22 @@ sub new
 {
 
 	# package name
-	my ($pckg) = shift;
+	my ($pckg, $node) = @_;
 
-	# new instance
-	my $self = { };
+	# create a new instance
+	my $self = { 'node' => $node, 'ids' => {} };
 
 	# bless instance into package
 	return bless $self, $pckg;
 
 }
 # EO constructor
+
+####################################################################################################
+
+# basic getter
+# ***************************************************************************************
+sub node { $_[0]->{'node'} }
 
 ####################################################################################################
 
@@ -81,10 +87,10 @@ sub set
 		# might be a shorthand value
 		my $matcher = $matcher{$key};
 
-		# rewrite longhand option
+		# rewrite longhand to shorthand
 		if (ref($matcher) eq 'Regexp')
 		{
-			# must match that single keys regex
+			# must only match that single keys regex
 			$matcher = { 'ordered' => [ [ $key ] ] };
 		}
 
@@ -241,20 +247,60 @@ sub set
 	# { printf "%s => %s\n", $key, join(", ", @{$longhands{$key}}); }
 	#####################################################
 
-	# check if hash has been passed
-	if ($self)
+	# overwrite styles with longhands
+	foreach my $key (keys %longhands)
+	{ $self->{$key} = $longhands{$key} }
+
+	# check if we have a new id
+	if ($longhands{'css-id'})
 	{
-		# overwrite styles with longhands
-		foreach my $key (keys %longhands)
-		{ $self->{$key} = $longhands{$key} }
+		# store all ids in our global hash
+		foreach my $id (@{$longhands{'css-id'}})
+		{ $self->node->root->{'ids'}->{$id} = $self->node; }
 	}
-	# EO if styles
 
 	# return results
 	return \ %longhands;
 
 }
 # EO sub set
+
+####################################################################################################
+
+# get value of a longhand
+# traverse the virtual tree
+# ***************************************************************************************
+sub get
+{
+
+	# get input arguments
+	my ($self, $key, $idx) = @_;
+
+	# check if found in current styles
+	if (exists $self->{$key}->[$idx || 0])
+	{ return $self->{$key}->[$idx || 0]; }
+
+	# do not go recursive on certain keys
+	# return undef if $key eq 'css-ref';
+	# return undef if $key eq 'css-id';
+
+	# check if option references another id
+	# if ($self->node->options->get('css-ref'))
+	# {
+	#	# get the reference to the other dom node
+	#	my $id = $self->node->options->get('css-ref');
+	#	# get the actual referenced dom dome (if any)
+	#	my $ref = $self->node->root->{'ids'}->{$id};
+	#	# give error message if reference was not found
+	#	die "referenced id <$id> not found" unless $ref;
+	#	# call reference dom node for key
+	#	return $ref->styles->get($key, $idx);
+	# }
+
+	# nothing found
+	return undef;
+
+}
 
 ####################################################################################################
 ####################################################################################################

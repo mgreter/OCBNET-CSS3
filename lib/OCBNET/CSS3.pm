@@ -56,6 +56,7 @@ sub new
 	# create a new instance
 	my $self = {
 
+		'ids' => {},
 		'text' => undef,
 		'suffix' => undef,
 		'bracket' => undef,
@@ -121,6 +122,10 @@ sub bracket : lvalue { $_[0]->{'bracket'} }
 # ***************************************************************************************
 sub parent { $_[0]->{'parent'} }
 sub children { $_[0]->{'children'} }
+
+# get the root node (the one without parent)
+# ***************************************************************************************
+sub root { $_[0]->parent ? $_[0]->parent : $_[0] }
 
 ####################################################################################################
 

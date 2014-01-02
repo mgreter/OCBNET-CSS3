@@ -27,8 +27,8 @@ sub new
 	my $self = $pckg->SUPER::new;
 
 	# store only longhands
-	$self->{'style'} = OCBNET::CSS3::Styles->new;
-	$self->{'option'} = OCBNET::CSS3::Styles->new;
+	$self->{'style'} = OCBNET::CSS3::Styles->new($self);
+	$self->{'option'} = OCBNET::CSS3::Styles->new($self);
 
 	# instance
 	return $self;
@@ -50,10 +50,42 @@ sub options { $_[0]->{'option'} }
 
 ####################################################################################################
 
-# setters and getters
+# simple getter and setter
 #**************************************************************************************************
-sub style : lvalue { $_[0]->{'style'}->{$_[1]}->[$_[2] || 0] }
-sub option : lvalue { $_[0]->{'option'}->{$_[1]}->[$_[2] || 0] }
+sub option { $_[0]->{'option'}->{$_[1]}->[$_[2] || 0] }
+
+# getter with recursive logic
+# can reference ids in options
+# try to load styles from there
+#**************************************************************************************************
+sub style
+{
+
+	# get input arguments
+	my ($self, $key, $idx) = @_;
+
+	# check if found in current styles
+	if (exists $self->{'style'}->{$key}->[$idx || 0])
+	{ return $self->{'style'}->{$key}->[$idx || 0]; }
+
+	# check if option references an id
+	if ($self->options->get('css-ref'))
+	{
+		# get the reference to the other dom node
+		my $id = $self->options->get('css-ref');
+		# get the actual referenced dom node
+		my $ref = $self->root->{'ids'}->{$id};
+		# give error message if reference was not found
+		die "referenced id <$id> not found" unless $ref;
+		# call reference dom node for key
+		return $ref->styles->get($key, $idx);
+	}
+
+	# nothing found
+	return undef;
+
+}
+
 
 ####################################################################################################
 ####################################################################################################
