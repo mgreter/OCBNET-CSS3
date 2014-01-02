@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_number $re_percent $re_length $re_byte); }
+BEGIN { our @EXPORT = qw($re_number $re_percent $re_size $re_length $re_byte); }
 
 ####################################################################################################
 # base regular expressions
@@ -26,17 +26,21 @@ our $re_number = qr/[\-\+]?[0-9]*\.?[0-9]+/s;
 # our $re_number_neg = qr/\-[0-9]*\.?[0-9]+/s;
 # our $re_number_pos = qr/\+?[0-9]*\.?[0-9]+/s;
 
-# match a percent value
+# regular expression to match a percent property
 #**************************************************************************************************
-our $re_percent = qr/$re_number\%/s;
+our $re_percent = qr/$re_number(?:\%)/i;
 
-# match a number from 0 to 255 (strict match)
+# regular expression to match a size property
 #**************************************************************************************************
-our $re_byte = qr/(?:0|[1-9]\d?|1\d{2}|2(?:[0-4]\d|5[0-5]))/s;
+our $re_size = qr/$re_number(?:em|ex|px|in|cm|mm|pt|pc)/i;
 
 # regular expression to match any length property
 #**************************************************************************************************
-our $re_length = qr/\b$re_number(?:em|ex|px|\%|in|cm|mm|pt|pc)?(?=\s|\b|\Z|;|,)/i;
+our $re_length = qr/$re_number(?:em|ex|px|\%|in|cm|mm|pt|pc)?/i;
+
+# match a octal number from 0 to 255 (strict match)
+#**************************************************************************************************
+our $re_byte = qr/(?:0|[1-9]\d?|1\d{2}|2(?:[0-4]\d|5[0-5]))/s;
 
 ####################################################################################################
 ####################################################################################################
