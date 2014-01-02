@@ -50,10 +50,6 @@ sub options { $_[0]->{'option'} }
 
 ####################################################################################################
 
-# simple getter and setter
-#**************************************************************************************************
-sub option { $_[0]->{'option'}->{$_[1]}->[$_[2] || 0] }
-
 # getter with recursive logic
 # can reference ids in options
 # try to load styles from there
@@ -77,15 +73,54 @@ sub style
 		my $ref = $self->root->{'ids'}->{$id};
 		# give error message if reference was not found
 		die "referenced id <$id> not found" unless $ref;
-		# call reference dom node for key
-		return $ref->styles->get($key, $idx);
+		# call referenced node for key
+		return $ref->style($key, $idx);
 	}
 
 	# nothing found
 	return undef;
 
 }
+# EO sub style
 
+####################################################################################################
+
+# getter with recursive logic
+# can reference ids in options
+# try to load options from there
+#**************************************************************************************************
+sub option
+{
+
+	# get input arguments
+	my ($self, $key, $idx) = @_;
+
+	# check if found in current styles
+	if (exists $self->{'style'}->{$key}->[$idx || 0])
+	{ return $self->{'style'}->{$key}->[$idx || 0]; }
+
+	# do not go recursive on certain keys
+	return undef if $key eq 'css-ref';
+	return undef if $key eq 'css-id';
+
+	# check if option references an id
+	if ($self->options->get('css-ref'))
+	{
+		# get the reference to the other dom node
+		my $id = $self->options->get('css-ref');
+		# get the actual referenced dom node
+		my $ref = $self->root->{'ids'}->{$id};
+		# give error message if reference was not found
+		die "referenced id <$id> not found" unless $ref;
+		# call referenced node for key
+		return $ref->option($key, $idx);
+	}
+
+	# nothing found
+	return undef;
+
+}
+# EO sub option
 
 ####################################################################################################
 ####################################################################################################
