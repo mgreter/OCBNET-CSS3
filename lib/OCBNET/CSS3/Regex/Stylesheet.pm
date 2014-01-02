@@ -39,9 +39,9 @@ qr/
 	(?: # inner block capture group
 		# match comment after text
 		# before has already matched
-		(??{$re_comment})?
+		(?:(??{$re_comment})|\/)?
 		# allowed chars
-		[^\\\"\'{}]+ |
+		[^\\\"\'\/{}]+ |
 		# escaped char
 		(?: \\ .)+ |
 		# a quoted string
@@ -65,11 +65,11 @@ qr/
 		((?:
 			# match comment after text
 			# before has already matched
-			(??{$re_comment})?
+			(?:(??{$re_comment})|\/)?
 			# capture any text
 			(?:
 				# allowed chars
-				[^\\\"\'{};]+ |
+				[^\\\"\'\/{};]+ |
 				# escaped char
 				(?: \\ .)+ |
 				# a quoted string
