@@ -23,6 +23,6 @@ EOF
 
 $rv = $css->parse($code);
 
-is    ($css->children->[0]->option('css-id'),    'test',      'parse css-id');
-is    ($css->children->[1]->option('css-ref'),   'test',      'parse css-ref');
+is    ($css->child(0)->option('css-id'),    'test',      'parse css-id');
+is    ($css->child(1)->option('css-ref'),   'test',      'parse css-ref');
 
