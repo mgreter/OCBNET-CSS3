@@ -145,7 +145,7 @@ sub set
 						# remove from search and
 						splice(@{$prefix}, $i, 1);
 						# restart loop
-						$i = 0; redo;
+						$i = -1; next;
 					}
 					# EO match regex
 
@@ -214,7 +214,7 @@ sub set
 						# remove from search and
 						splice(@{$postfix}, $i, 1);
 						# restart loop
-						$i = 0; redo;
+						$i = -1; next;
 					}
 					# EO match regex
 
