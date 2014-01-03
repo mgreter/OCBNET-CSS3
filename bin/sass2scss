@@ -22,6 +22,7 @@ use Getopt::Long;
 my $pretty = 0;
 
 # define a sub to print out the version (mimic behaviour of node.js blessc)
+# this script has it's own version numbering as it's not dependent on any libs
 sub version { print "sass2scss 0.2.0 (SASS to SCSS Converter) [Perl]"; exit 0; };
 
 # get options
@@ -38,7 +39,7 @@ GetOptions (
 # whitespace buffer
 my $ws = '';
 
-# slurp next line
+# concat next line
 my $comma = 0;
 
 # is in comment node
@@ -156,7 +157,7 @@ sub process ($)
 		# current line has less or same indentation
 		elsif (length($indent) <= length($indent[-1]))
 		{
-			# print a semicolon if not in slurp mode
+			# add semicolon if not in concat mode
 			print ";" unless $comment || $comma;
 		}
 
@@ -204,7 +205,7 @@ sub process ($)
 		# flush line
 		flush($line);
 
-		# check if next line is slurped
+		# check if next line should be concatenated
 		$comma = $line =~ m/,\s*\z/s unless $comment;
 
 	}
@@ -222,7 +223,7 @@ process $_ while <$fh>;
 
 # make sure to finish
 # ***************************************************************************************
-process(";");
+process ";";
 
 ####################################################################################################
 ####################################################################################################
