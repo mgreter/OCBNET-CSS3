@@ -42,7 +42,7 @@ OCBNET::CSS3::Styles::register('font-style', qr/(?:normal|italic|oblique)/is, 'n
 OCBNET::CSS3::Styles::register('font-variant', qr/(?:normal|small-caps)/is, 'normal');
 OCBNET::CSS3::Styles::register('font-weight', qr/(?:normal|bold|bolder|lighter|[1-9]00)/is, 'normal');
 OCBNET::CSS3::Styles::register('font-size', qr/(?:$re_length|$re_percent|smaller|larger|(?:xx?-)?(?:small|large))/is, 'inherit');
-OCBNET::CSS3::Styles::register('line-height', qr/(?:$re_length|$re_percent|inherit)/is, 'normal');
+OCBNET::CSS3::Styles::register('line-height', qr/(?:$re_length|$re_percent)/is, 'normal');
 OCBNET::CSS3::Styles::register('font-family', qr/(?:$re_string)(?:\s*,\s*$re_string)*/is, 'inherit');
 
 ####################################################################################################
@@ -63,13 +63,14 @@ OCBNET::CSS3::Styles::register('font',
 	[
 		# always needed
 		[ 'font-size' ],
-		# next is optional, but
-		# fallowed by a slash
+		# next bit is optional, but
+		# must have a forward slash
 		[
-			# attention, order here is reverse
-			# this is so we have the name always first
-			# this actually means the regex must be first
+			# attention, logic order here is reversed
+			# this way we have the css name always first in the array
+			# but this actually means that the regex must match first
 			'line-height',
+			# value gets mandatory if we find a forwards slash
 			qr/\s*\/\s*/
 		],
 		# always needed
