@@ -10,7 +10,6 @@ my $rv;
 
 use OCBNET::CSS3::Styles::Padding;
 use OCBNET::CSS3::Styles::References;
-use OCBNET::CSS3::DOM::Comment::Options;
 
 # OO interface
 my $css = OCBNET::CSS3::Stylesheet->new;

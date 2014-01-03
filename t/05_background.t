@@ -8,8 +8,8 @@ BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
 
-use OCBNET::CSS3::Styles::References;
 use OCBNET::CSS3::Styles::Background;
+use OCBNET::CSS3::Styles::References;
 
 # OO interface
 my $css = OCBNET::CSS3::Stylesheet->new;

@@ -9,7 +9,6 @@ BEGIN { use_ok('OCBNET::CSS3') };
 my $rv;
 
 use OCBNET::CSS3::Styles::References;
-use OCBNET::CSS3::DOM::Comment::Options;
 
 # OO interface
 my $css = OCBNET::CSS3::Stylesheet->new;
