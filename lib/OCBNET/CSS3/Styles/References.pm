@@ -19,7 +19,10 @@ use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::DOM::Comment::Options;
 
 ####################################################################################################
-# register longhand properties for margin
+# register longhand properties for references
+# blocks with an id can be referenced by other blocks
+# they act as a parent to further resolve styles/options
+# you may declare multiple references as a comma separated list
 ####################################################################################################
 
 OCBNET::CSS3::Styles::register('css-id', $re_identifier);
