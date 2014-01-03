@@ -235,7 +235,7 @@ sass2scss - SASS to SCSS Converter
 
 =head1 SYNOPSIS
 
-csslint [options] [ source | - ]
+sass2scss [options] [ source | - ]
 
  Options:
    -v, --version      print version
