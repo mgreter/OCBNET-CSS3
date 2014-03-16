@@ -208,6 +208,9 @@ sub process ($)
 		# check if next line should be concatenated
 		$comma = $line =~ m/,\s*\z/s unless $comment;
 
+		# check if multiline comment is closed
+		$comment = '' if ($line =~ m/\*\/\s*\z/);
+
 	}
 	# EO has indent
 
