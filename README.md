@@ -17,6 +17,8 @@ tested regular expressions, which may be handy for other css related tasks.
 INSTALL
 =======
 
+[![Build Status](https://travis-ci.org/mgreter/OCBNET-CSS3.svg?branch=master)](https://travis-ci.org/mgreter/OCBNET-CSS3)
+
 Standard process for building & installing modules:
 
 ```
