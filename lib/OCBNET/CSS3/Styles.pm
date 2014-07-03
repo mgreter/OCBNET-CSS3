@@ -101,7 +101,7 @@ sub set
 			# create arrays for all longhands
 			$longhands{$_} = [] foreach @{$matcher->{'prefix'} || []};
 			$longhands{$_->[0]} = [] foreach @{$matcher->{'ordered'} || []};
-			$longhands{$_} = [] foreach @{$matcher->{'postfix'} || []};
+			# $longhands{$_} = [] foreach @{$matcher->{'postfix'} || []};
 
 			# parse list
 			# exit if not
@@ -116,12 +116,12 @@ sub set
 				# manipulate them later for loop control
 				my $prefix = [ @{$matcher->{'prefix'} || []} ];
 				my $ordered = [ @{$matcher->{'ordered'} || []} ];
-				my $postfix = [ @{$matcher->{'postfix'} || []} ];
+				# my $postfix = [ @{$matcher->{'postfix'} || []} ];
 
 				# set defaults for all optional longhands
 				push @{$longhands{$_}}, $default{$_} foreach @{$prefix};
 				push @{$longhands{$_->[0]}}, $default{$_->[0]} foreach @{$ordered};
-				push @{$longhands{$_}}, $default{$_} foreach @{$postfix};
+				# push @{$longhands{$_}}, $default{$_} foreach @{$postfix};
 
 				# optional prefixes (can occur in any order)
 				for (my $i = 0; $i < scalar(@{$prefix}); $i++)
@@ -160,7 +160,7 @@ sub set
 					my $name = $prop->[0];
 					# get optinal alternative
 					# string: eval to this if nothing set
-					# regexp: is optinal fallowed by this
+					# regexp: is optionally fallowed by this
 					my $alt = $prop->[1];
 
 					# get the configured matcher
@@ -195,31 +195,31 @@ sub set
 				}
 				# EO each longhand
 
-				# optional postfixes (can occur in any order)
-				for (my $i = 0; $i < scalar(@{$postfix}); $i++)
-				{
+				# # optional postfixes (can occur in any order)
+				# for (my $i = 0; $i < scalar(@{$postfix}); $i++)
+				# {
 
-					# get property name
-					my $prop = $postfix->[$i];
+				# 	# get property name
+				# 	my $prop = $postfix->[$i];
 
-					# get the configured matcher
-					# might be a shorthand value
-					my $regex = $matcher{$prop};
+				# 	# get the configured matcher
+				# 	# might be a shorthand value
+				# 	my $regex = $matcher{$prop};
 
-					# test if we have found this property
-					if ($value =~ s/\A\s*($regex)\s*//s)
-					{
-						# matches this property
-						$longhands{$prop}->[-1] = $1;
-						# remove from search and
-						splice(@{$postfix}, $i, 1);
-						# restart loop
-						$i = -1; next;
-					}
-					# EO match regex
+				# 	# test if we have found this property
+				# 	if ($value =~ s/\A\s*($regex)\s*//s)
+				# 	{
+				# 		# matches this property
+				# 		$longhands{$prop}->[-1] = $1;
+				# 		# remove from search and
+				# 		splice(@{$postfix}, $i, 1);
+				# 		# restart loop
+				# 		$i = -1; next;
+				# 	}
+				# 	# EO match regex
 
-				}
-				# EO each postfix
+				# }
+				# # EO each postfix
 
 				# check if we should parse in list mode
 				# if we find a comma we will parse again
