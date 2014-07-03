@@ -18,6 +18,7 @@ INSTALL
 =======
 
 [![Build Status](https://travis-ci.org/mgreter/OCBNET-CSS3.svg?branch=master)](https://travis-ci.org/mgreter/OCBNET-CSS3)
+[![Coverage Status](https://img.shields.io/coveralls/mgreter/OCBNET-CSS3.svg)](https://coveralls.io/r/mgreter/OCBNET-CSS3?branch=master)
 
 Standard process for building & installing modules:
 
