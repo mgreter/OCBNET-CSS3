@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 26;
+use Test::More tests => 33;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $css = OCBNET::CSS3::Stylesheet->new;
@@ -47,3 +47,24 @@ is    ($css->children->[5]->text,  '/* post2 */',   'parses post2 with correct t
 is    (scalar(@{$css->children}),  6,               'parses correct amount of dom nodes');
 is    ($css->render,               $code,           'render the same as parsed');
 is    ($css->clone(1)->render,     $code,           'clone renders the same as parsed');
+
+BEGIN { use_ok('OCBNET::CSS3::DOM::Block') };
+
+my $base = new OCBNET::CSS3;
+$rv = eval { $base->type; };
+
+is    ($rv,          'base',                    'base block type is returned');
+is    ($@,               '',                    'base block type implemented');
+
+my $block = new OCBNET::CSS3::DOM::Block;
+$rv = eval { $block->type; };
+
+is    ($rv,           undef,                    'block type throws an errors');
+like  ($@,            qr/^not implemented/,     'block type not implemented');
+
+my $styles = new OCBNET::CSS3::Styles;
+OCBNET::CSS3::Styles::register('foobar');
+$rv = eval { $styles->set('foobar', '10px'); };
+
+is    ($rv,           undef,                    'invalid style type throws an errors');
+like  ($@,            qr/^unknown type/,        'invalid style type not implemented');
