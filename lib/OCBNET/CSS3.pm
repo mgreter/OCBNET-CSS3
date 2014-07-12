@@ -72,6 +72,49 @@ sub new
 
 ####################################################################################################
 
+# get statistics object
+# ***************************************************************************************
+sub stats
+{
+
+	my ($node) = @_;
+
+	# add first object
+	my @objects = ($node);
+
+	# array to count items
+	my (@imports, @selectors);
+
+	# process as long as we have objects
+	while (my $object = shift @objects)
+	{
+		# process children array
+		if ($object->{'children'})
+		{
+			# add object to counter arrays
+			push @objects, @{$object->{'children'}};
+			push @imports, $object if $object->type eq 'import';
+			push @selectors, $object if $object->type eq 'selector';
+		}
+	}
+
+	# split imports and selectors by commas
+	@imports = map { split /,/, $_->text } @imports;
+	@selectors = map { split /,/, $_->text } @selectors;
+
+	# KB 262161 outlines the maximum number of stylesheets
+	# and rules supported by Internet Explorer 6 to 9.
+	# - A sheet may contain up to 4095 rules
+	# - A sheet may @import up to 31 sheets
+	# - @import nesting supports up to 4 levels deep
+
+	return { 'imports' => \@imports, 'selectors' => \@selectors }
+
+}
+# EO stats
+
+####################################################################################################
+
 # create a cloned object
 # ***************************************************************************************
 sub clone

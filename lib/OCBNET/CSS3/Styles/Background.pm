@@ -13,6 +13,7 @@ use warnings;
 use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::Regex::Colors;
 use OCBNET::CSS3::Regex::Numbers;
+use OCBNET::CSS3::Regex::Base qw($re_url);
 
 ####################################################################################################
 
