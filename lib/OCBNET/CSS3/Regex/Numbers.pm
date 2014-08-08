@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_number $re_percent $re_size $re_length $re_byte); }
+BEGIN { our @EXPORT = qw($re_number $re_percent $re_size $re_length $re_byte fromPx); }
 
 ####################################################################################################
 # base regular expressions
@@ -41,6 +41,18 @@ our $re_length = qr/$re_number(?:em|ex|px|\%|in|cm|mm|pt|pc)?/i;
 # match a octal number from 0 to 255 (strict match)
 #**************************************************************************************************
 our $re_byte = qr/(?:0|[1-9]\d?|1\d{2}|2(?:[0-4]\d|5[0-5]))/s;
+
+####################################################################################################
+
+# parse dimension from pixel
+#**************************************************************************************************
+sub fromPx
+{
+	# return undef if nothing passed
+	return unless defined $_[0];
+	# parse number via regular expression
+	$_[0] =~ m/($re_number)px/i ? $1 : $_[0];
+}
 
 ####################################################################################################
 ####################################################################################################

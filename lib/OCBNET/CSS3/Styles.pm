@@ -270,6 +270,11 @@ sub set
 
 	}
 	# EO if matcher
+	else
+	{
+		# store the original value
+		$longhands{$key} = [ $value ];
+	}
 
 	# check if we have a new id
 	if ($longhands{'css-id'})
@@ -297,8 +302,8 @@ sub set
 			# pass this "shorthand" value to parse longhands
 			$self->set($name, join(',', @{$longhands{$name}}));
 		}
-		# this key is finally a longhand
-		elsif (ref($matcher{$name}) eq 'Regexp')
+		# it's a longhand
+		else
 		{
 			# just store the parsed value
 			$self->{$name} = $longhands{$name};

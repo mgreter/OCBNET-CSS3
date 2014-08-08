@@ -58,6 +58,7 @@ sub new
 
 		'ids' => {},
 		'text' => undef,
+		'footer' => '',
 		'suffix' => undef,
 		'bracket' => undef,
 		'children' => [],
@@ -166,6 +167,15 @@ sub bracket : lvalue { $_[0]->{'bracket'} }
 sub parent { $_[0]->{'parent'} }
 sub children { $_[0]->{'children'} }
 
+# get only css block scopes
+# ***************************************************************************************
+sub blocks { grep { UNIVERSAL::isa($_, 'OCBNET::CSS3::DOM::Block') } @{$_[0]->children} }
+
+# get typed blocks in list context
+# ***************************************************************************************
+sub imports { grep { $_->type eq 'import' } $_[0]->blocks }
+sub selectors { grep { $_->type eq 'selector' } $_[0]->blocks }
+
 # get child by index
 # ***************************************************************************************
 sub child { $_[0]->{'children'}->[ $_[1] ] }
@@ -183,6 +193,9 @@ sub parse
 
 	# get input arguments
 	my ($self, $text) = @_;
+
+	# maybe we should error out here
+	return $self unless defined $text;
 
 	# parse as much as possible
 	# a stricter version would replace the parsed
@@ -294,6 +307,26 @@ sub prepend
 
 ####################################################################################################
 
+sub body
+{
+	# get input arguments
+	my ($self, $comments, $indent) = @_;
+
+	# declare string
+	my $code = '';
+
+	# init default indent
+	$indent = 0 unless $indent;
+
+	# render and add each children
+	foreach my $child (@{$self->children})
+	{ $code .= $child->render($comments, $indent + 1); }
+
+	# return result
+	return $code;
+
+}
+
 # render block with children
 # return the same css as parsed
 # ***************************************************************************************
@@ -322,6 +355,9 @@ sub render
 	# render and add each children
 	foreach my $child (@{$self->children})
 	{ $code .= $child->render($comments, $indent + 1); }
+
+	# append some generic footer
+	$code .= $self->{'footer'};
 
 	# add closer bracket if scope has been set
 	$code .= $closer{$self->bracket} if $self->bracket;
