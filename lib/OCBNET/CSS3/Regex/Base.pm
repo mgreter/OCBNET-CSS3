@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that can be exported
-BEGIN { our @EXPORT_OK = qw($re_url $re_uri $re_import fromUrl wrapUrl); }
+BEGIN { our @EXPORT_OK = qw($re_url $re_uri $re_import unwrapUrl wrapUrl); }
 
 # define our functions that will be exported
 BEGIN { our @EXPORT = qw($re_apo $re_quot $re_identifier $re_string $re_vendors unquot); }
@@ -87,6 +87,35 @@ sub unquot
 	$txt =~ s/\\(.)/$1/g;
 	# return result
 	$txt;
+}
+
+####################################################################################################
+
+# unwrap an url
+#**************************************************************************************************
+sub unwrapUrl
+{
+	# check for css url pattern (call again to unwrap quotes)
+	return unwrapUrl($1) if $_[0] =~ m/\A\s*url\(\s*(.*?)\s*\)\s*\z/m;
+	# unwrap quotes if there are any
+	return $1 if $_[0] =~ m/\A\"(.*?)\"\z/m;
+	return $1 if $_[0] =~ m/\A\'(.*?)\'\z/m;
+	# return same as given
+	return $_[0];
+}
+
+# wrap an url
+#**************************************************************************************************
+sub wrapUrl
+{
+	# get url from arguments
+	my $url = $_[0];
+	# change slashes
+	$url =~ s/\\/\//g;
+	# escape quotes
+	$url =~ s/\"/\\\"/g;
+	# return wrapped url
+	return 'url("' . $url . '")';
 }
 
 ####################################################################################################
