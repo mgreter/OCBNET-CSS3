@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 45;
+use Test::More tests => 61;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
@@ -53,6 +53,18 @@ my $code = <<EOF;
 	/* css-id: test-06; */
 	/* css-ref: test-05; */
 	background: url(C);
+}
+
+.test-07
+{
+	/* css-id: test-07; */
+	/* css-ref: test-03; */
+	background: rgba(1,2,3,.5), rgb(9,6,3) repeat-x, green no-repeat;
+}
+
+.test-08
+{
+	/* css-ref: test-07; */
 }
 
 EOF
@@ -109,3 +121,23 @@ is    ($css->child(5)->style('background-repeat'),     'repeat',          'parse
 is    ($css->child(5)->style('background-position-y'), 'top',             'parse background-position-y (shorthand default)');
 is    ($css->child(5)->style('background-position-x'), 'left',            'parse background-position-x (shorthand default)');
 is    ($css->child(5)->style('background-attachment'), 'scroll',          'parse background-attachment (shorthand default)');
+
+is    ($css->child(6)->style('background-color'),      'rgba(1,2,3,.5)',  'parse background-color (shorthand)');
+is    ($css->child(6)->style('background-color', 0),   'rgba(1,2,3,.5)',  'parse background-color[0] (shorthand)');
+is    ($css->child(6)->style('background-color', 1),   'rgb(9,6,3)',      'parse background-color[1] (shorthand)');
+is    ($css->child(6)->style('background-color', 2),   'green',           'parse background-color[2] (shorthand)');
+
+is    ($css->child(6)->style('background-repeat'),     'repeat',          'parse background-repeat (shorthand)');
+is    ($css->child(6)->style('background-repeat', 0),  'repeat',          'parse background-repeat[0] (shorthand)');
+is    ($css->child(6)->style('background-repeat', 1),  'repeat-x',        'parse background-repeat[1] (shorthand)');
+is    ($css->child(6)->style('background-repeat', 2),  'no-repeat',       'parse background-repeat[2] (shorthand)');
+
+is    ($css->child(6)->style('background-repeat'),       'repeat',        'parse background-repeat-x (shorthand)');
+is    ($css->child(6)->style('background-repeat-x', 0),  'repeat',        'parse background-repeat-x[0] (shorthand)');
+is    ($css->child(6)->style('background-repeat-x', 1),  'repeat',        'parse background-repeat-x[1] (shorthand)');
+is    ($css->child(6)->style('background-repeat-x', 2),  0,               'parse background-repeat-x[2] (shorthand)');
+
+is    ($css->child(6)->style('background-repeat'),       'repeat',        'parse background-repeat-x (shorthand)');
+is    ($css->child(6)->style('background-repeat-y', 0),  'repeat',        'parse background-repeat-y[0] (shorthand)');
+is    ($css->child(6)->style('background-repeat-y', 1),  0,               'parse background-repeat-y[1] (shorthand)');
+is    ($css->child(6)->style('background-repeat-y', 2),  0,               'parse background-repeat-y[2] (shorthand)');

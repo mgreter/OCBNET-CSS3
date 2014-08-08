@@ -63,5 +63,25 @@ OCBNET::CSS3::Styles::register('background',
 }, 'none', 1);
 
 ####################################################################################################
+# register getters for virtual longhand properties
+####################################################################################################
+
+OCBNET::CSS3::Styles::getter('background-repeat-x', sub
+{
+	my ($self, $type, $name, $idx) = @_;
+	my $fn = $self->can($type) || die "fatal type";
+	my $repeat = &{$fn}($self, 'background-repeat', $idx) || return 1;
+	return $repeat eq "repeat-x" || $repeat eq "repeat" ? 'repeat' : 0;
+});
+
+OCBNET::CSS3::Styles::getter('background-repeat-y', sub
+{
+	my ($self, $type, $name, $idx) = @_;
+	my $fn = $self->can($type) || die "fatal type";
+	my $repeat = &{$fn}($self, 'background-repeat', $idx) || return 1;
+	return $repeat eq "repeat-y" || $repeat eq "repeat" ? 'repeat' : 0;
+});
+
+####################################################################################################
 ####################################################################################################
 1;

@@ -54,50 +54,19 @@ sub options { $_[0]->{'option'} }
 # can reference ids in options
 # try to load styles from there
 #**************************************************************************************************
-sub style
+sub get
 {
 
 	# get input arguments
-	my ($self, $key, $idx) = @_;
+	my ($self, $type, $key, $idx) = @_;
+
+	# try to get/call registered getter function for key
+	my $getter = $OCBNET::CSS3::Styles::getter{$key};
+	return $getter->($self, $type, $key, $idx) if defined $getter;
 
 	# check if found in current styles
-	if (exists $self->{'style'}->{$key}->[$idx || 0])
-	{ return $self->{'style'}->{$key}->[$idx || 0]; }
-
-	# check if option references an id
-	if ($self->options->get('css-ref'))
-	{
-		# get the reference to the other dom node
-		my $id = $self->options->get('css-ref');
-		# get the actual referenced dom node
-		my $ref = $self->root->{'ids'}->{$id};
-		# give error message if reference was not found
-		die "referenced id <$id> not found" unless $ref;
-		# call referenced node for key
-		return $ref->style($key, $idx);
-	}
-
-	# nothing found
-	return undef;
-
-}
-# EO sub style
-
-####################################################################################################
-
-# getter with recursive logic
-# can reference ids in options
-# try to load options from there
-#**************************************************************************************************
-sub option
-{
-
-	# get input arguments
-	my ($self, $key, $idx) = @_;
-
-	# check if found in current styles
-	if (exists $self->{'option'}->{$key}->[$idx || 0])
-	{ return $self->{'option'}->{$key}->[$idx || 0]; }
+	if (exists $self->{$type}->{$key}->[$idx || 0])
+	{ return $self->{$type}->{$key}->[$idx || 0]; }
 
 	# do not go recursive on certain keys
 	return undef if $key eq 'css-ref';
@@ -112,8 +81,52 @@ sub option
 		my $ref = $self->root->{'ids'}->{$id};
 		# give error message if reference was not found
 		die "referenced id <$id> not found" unless $ref;
+		# call referenced node for key and type
+		return $ref->get($type, $key, $idx);
+	}
+
+	# nothing found
+	return undef;
+
+}
+# EO sub get
+
+####################################################################################################
+
+# getters for styles and options
+#**************************************************************************************************
+sub style { get(shift, 'style', @_) }
+sub option { get(shift, 'option', @_) }
+
+####################################################################################################
+
+# getter with recursive logic
+# can reference ids in options
+# try to load options from there
+#**************************************************************************************************
+sub find
+{
+
+	# get input arguments
+	my ($self, $opt, $key) = @_;
+
+	# check if found in current styles
+	if (exists $self->{$opt}->{$key})
+	{ return $self if scalar(@{$self->{$opt}->{$key}}) }
+
+	# do not go recursive on certain keys
+	# return undef if $key eq 'css-ref';
+	# return undef if $key eq 'css-id';
+
+	# check if option references an id
+	if (my $id = $self->options->get('css-ref'))
+	{
+		# get the actual referenced dom node
+		my $ref = $self->root->{'ids'}->{$id};
+		# give error message if reference was not found
+		die "referenced id <$id> not found" unless $ref;
 		# call referenced node for key
-		return $ref->option($key, $idx);
+		return $ref->find($opt, $key);
 	}
 
 	# nothing found
@@ -121,6 +134,52 @@ sub option
 
 }
 # EO sub option
+
+####################################################################################################
+
+# helper to check if we implement a certain class
+#**************************************************************************************************
+sub isa {  shift->SUPER::isa(map { 'OCBNET::CSS3::' . $_ } @_) }
+
+####################################################################################################
+
+# remove certain styles
+#**************************************************************************************************
+sub clean
+{
+
+	# get selector and regex
+	# remove styles found by regex
+	my ($selector, $regexp) = @_;
+
+	# define default expression to clean all
+	$regexp = qr// unless defined $regexp;
+
+	# remove options
+	foreach my $key (keys %{$selector->{'option'}})
+	{
+		next unless $key =~ m/^\s*$regexp/is;
+		delete $selector->{'option'}->{$key};
+	}
+
+	# remove styles
+	foreach my $key (keys %{$selector->{'style'}})
+	{
+		next unless $key =~ m/^\s*$regexp/is;
+		delete $selector->{'style'}->{$key};
+	}
+
+	# define default expression to clean all
+	$regexp = qr// unless defined $regexp;
+
+	# remove all background declarations now
+	@{$selector->{'children'}} = grep {
+		not ($_->{'key'} && $_->{'key'} =~ m/^\s*$regexp/is)
+	} @{$selector->{'children'}};
+
+
+}
+# EO sub clean
 
 ####################################################################################################
 ####################################################################################################

@@ -14,12 +14,14 @@ use Scalar::Util 'blessed';
 
 our %matcher;
 our %default;
+our %setter;
+our %getter;
 our %list;
 
 ####################################################################################################
 
 # static function only
-# never call as object
+# never call as method
 sub register
 {
 
@@ -39,6 +41,34 @@ sub register
 
 }
 # EO fn register
+
+# static function only
+# never call as method
+sub setter
+{
+
+	# get input arguments of static call
+	my ($key, $setter) = @_;
+
+	# store the matcher by key
+	$setter{$key} = $setter;
+
+}
+# EO setter
+
+# static function only
+# never call as method
+sub getter
+{
+
+	# get input arguments of static call
+	my ($key, $getter) = @_;
+
+	# store the matcher by key
+	$getter{$key} = $getter;
+
+}
+# EO getter
 
 ####################################################################################################
 
@@ -246,7 +276,7 @@ sub set
 	{
 		# store all ids in our global hash
 		foreach my $id (@{$longhands{'css-id'}})
-		{ $self->node->root->{'ids'}->{$id} = $self->node; }
+		{ $self->root->{'ids'}->{$id} = $self->node; }
 	}
 	# EO if css-id
 
@@ -272,6 +302,8 @@ sub set
 		{
 			# just store the parsed value
 			$self->{$name} = $longhands{$name};
+			# call setter hook if one was defined
+			$setter{$name}->($self) if $setter{$name};
 		}
 	}
 	# EO each longhand
