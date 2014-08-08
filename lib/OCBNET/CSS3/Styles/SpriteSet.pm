@@ -2,7 +2,7 @@
 # Copyright 2013/2014 by Marcel Greter
 # This file is part of OCBNET-CSS3 (GPL3)
 ####################################################################################################
-package OCBNET::CSS3::Styles::Spriteset;
+package OCBNET::CSS3::Styles::SpriteSet;
 ####################################################################################################
 
 use strict;
