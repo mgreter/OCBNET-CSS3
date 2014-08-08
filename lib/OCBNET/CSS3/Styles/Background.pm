@@ -21,7 +21,7 @@ use OCBNET::CSS3::Regex::Base qw($re_url);
 #**************************************************************************************************
 my $re_bg_image = qr/(?:none|$re_url|inherit)/i;
 my $re_bg_attachment = qr/(?:scroll|fixed|inherit)/i;
-my $re_bg_repeat = qr/(?:no-repeat|repeat|repeat-x|repeat-y)/i;
+my $re_bg_repeat = qr/(?:no-repeat|repeat(?:\-[xy])?)/i;
 my $re_bg_position_y = qr/(?:top|bottom|center|$re_length)/i;
 my $re_bg_position_x = qr/(?:left|right|center|$re_length)/i;
 
@@ -44,8 +44,8 @@ OCBNET::CSS3::Styles::register('background-attachment', $re_bg_attachment, 'scro
 OCBNET::CSS3::Styles::register('background-position',
 {
 	'prefix' => [
-		'background-position-y',
-		'background-position-x'
+		'background-position-x',
+		'background-position-y'
 	],
 	'matcher' => $re_bg_positions
 }, 'top left', 1);

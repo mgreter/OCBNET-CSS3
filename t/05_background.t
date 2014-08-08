@@ -70,8 +70,8 @@ is    ($css->child(0)->style('background-attachment'), 'scroll',          'parse
 is    ($css->child(1)->style('background-color'),      'blue',            'parse background-color (shorthand)');
 is    ($css->child(1)->style('background-image'),      'none',            'parse background-image (default)');
 is    ($css->child(1)->style('background-repeat'),     'repeat',          'parse background-repeat (default)');
-is    ($css->child(1)->style('background-position-y'), '20px',            'parse background-position-y (shorthand)');
-is    ($css->child(1)->style('background-position-x'), '40px',            'parse background-position-x (shorthand)');
+is    ($css->child(1)->style('background-position-x'), '20px',            'parse background-position-x (shorthand)');
+is    ($css->child(1)->style('background-position-y'), '40px',            'parse background-position-y (shorthand)');
 is    ($css->child(1)->style('background-attachment'), 'scroll',          'parse background-attachment (default)');
 
 is    ($css->child(2)->style('background-color'),      'blue',            'parse background-color (shorthand)');
