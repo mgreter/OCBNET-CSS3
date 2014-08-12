@@ -14,7 +14,7 @@ use warnings;
 BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_number $re_percent $re_size $re_length $re_byte fromPx); }
+BEGIN { our @EXPORT = qw($re_number $re_percent $re_size $re_length $re_byte fromPx toPx); }
 
 ####################################################################################################
 # base regular expressions
@@ -52,6 +52,13 @@ sub fromPx
 	return unless defined $_[0];
 	# parse number via regular expression
 	$_[0] =~ m/($re_number)px/i ? $1 : $_[0];
+}
+
+# adds pixel unit
+#**************************************************************************************************
+sub toPx
+{
+	sprintf "%gpx", $_[0]
 }
 
 ####################################################################################################

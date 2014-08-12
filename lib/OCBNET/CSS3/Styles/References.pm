@@ -25,8 +25,8 @@ use OCBNET::CSS3::DOM::Comment::Options;
 # you may declare multiple references as a comma separated list
 ####################################################################################################
 
-OCBNET::CSS3::Styles::register('css-id', $re_identifier);
-OCBNET::CSS3::Styles::register('css-ref', $re_identifier);
+OCBNET::CSS3::Styles::register('css-id', $re_identifier, undef, 0);
+OCBNET::CSS3::Styles::register('css-ref', $re_identifier, undef, 1);
 
 ####################################################################################################
 ####################################################################################################

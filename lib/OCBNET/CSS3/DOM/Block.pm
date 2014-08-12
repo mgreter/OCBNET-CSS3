@@ -72,17 +72,18 @@ sub get
 	return undef if $key eq 'css-ref';
 	return undef if $key eq 'css-id';
 
-	# check if option references an id
-	if ($self->options->get('css-ref'))
+	# check each css references for given key
+	foreach my $id ($self->options->list('css-ref'))
 	{
-		# get the reference to the other dom node
-		my $id = $self->options->get('css-ref');
 		# get the actual referenced dom node
 		my $ref = $self->root->{'ids'}->{$id};
 		# give error message if reference was not found
 		die "referenced id <$id> not found" unless $ref;
-		# call referenced node for key and type
-		return $ref->get($type, $key, $idx);
+		# resolve value on referenced block
+		# will itself try to resolve further
+		my $value = $ref->get($type, $key, $idx);
+		# only return if value is defined
+		return $value if defined $value;
 	}
 
 	# nothing found
@@ -108,25 +109,28 @@ sub find
 {
 
 	# get input arguments
-	my ($self, $opt, $key) = @_;
+	my ($self, $type, $key) = @_;
 
 	# check if found in current styles
-	if (exists $self->{$opt}->{$key})
-	{ return $self if scalar(@{$self->{$opt}->{$key}}) }
+	if (exists $self->{$type}->{$key})
+	{ return $self if scalar(@{$self->{$type}->{$key}}) }
 
 	# do not go recursive on certain keys
 	# return undef if $key eq 'css-ref';
 	# return undef if $key eq 'css-id';
 
-	# check if option references an id
-	if (my $id = $self->options->get('css-ref'))
+	# check each css references for given key
+	foreach my $id ($self->options->list('css-ref'))
 	{
 		# get the actual referenced dom node
 		my $ref = $self->root->{'ids'}->{$id};
 		# give error message if reference was not found
 		die "referenced id <$id> not found" unless $ref;
-		# call referenced node for key
-		return $ref->find($opt, $key);
+		# resolve value on referenced block
+		# will itself try to resolve further
+		my $result = $ref->find($type, $key);
+		# only return if result is defined
+		return $result if defined $result;
 	}
 
 	# nothing found

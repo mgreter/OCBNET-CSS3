@@ -272,6 +272,8 @@ sub set
 	# EO if matcher
 	else
 	{
+		# trim whitespace for value
+		$value =~ s/(?:\A\s+|\s+\z)//g;
 		# store the original value
 		$longhands{$key} = [ $value ];
 	}
@@ -322,7 +324,6 @@ sub set
 ####################################################################################################
 
 # get value of a longhand
-# traverse the virtual tree
 # ***************************************************************************************
 sub get
 {
@@ -341,6 +342,25 @@ sub get
 
 ####################################################################################################
 
+# get list of all longhands
+# ***************************************************************************************
+sub list
+{
+
+	# get input arguments
+	my ($self, $key) = @_;
+
+	# check if found in current styles
+	if (exists $self->{$key})
+	{ return @{$self->{$key}}; }
+
+	# nothing found
+	return ();
+
+}
+
+####################################################################################################
+
 # access helper for node root
 # ***************************************************************************************
 sub root { shift->node->root(@_) }
@@ -349,29 +369,3 @@ sub root { shift->node->root(@_) }
 ####################################################################################################
 1;
 
-__DATA__
-
-# This code would make the "get" method resolve the
-# virtual references. But we only could resolve for
-# styles or options on the parent node. Since we cannot
-# know which item from node->parent we are querying.
-# So we cannot resolve the requested value safely.
-# Therefore leave to parent class to be implemented.
-
-# do not go recursive on certain keys
-return undef if $key eq 'css-ref';
-return undef if $key eq 'css-id';
-
-# check if option references another id
-if ($self->node->options->get('css-ref'))
-{
-	# get the reference to the other dom node
-	my $id = $self->node->options->get('css-ref');
-	# get the actual referenced dom dome (if any)
-	my $ref = $self->node->root->{'ids'}->{$id};
-	# give error message if reference was not found
-	die "referenced id <$id> not found" unless $ref;
-	# call reference dom node for key
-	return $ref->styles->get($key, $idx);
-}
- #EO if css-ref
