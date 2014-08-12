@@ -26,7 +26,7 @@ sub reader
 	$text =~ s/(?:\A\s*\/+\*+|\*+\/+\s*\z)//gs;
 
 	# try to parse key/value pairs (pretty unstrict, but has loose syntax)
-	while ($text =~ m/(?:\A|;+)\s*($re_identifier)\s*\:\s*(.*?)\s*(?:\z|;+)/g)
+	while ($text =~ m/(?:\A|;+)\s*($re_identifier)\s*\:\s*([^;]*?)\s*(?=\z|;+)/g)
 	{
 		if ($self->parent && $self->parent->options)
 		{ $self->parent->options->set($1, $2); }
