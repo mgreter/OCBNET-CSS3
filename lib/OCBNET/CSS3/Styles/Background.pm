@@ -12,6 +12,7 @@ use warnings;
 
 use OCBNET::CSS3::Regex::Colors;
 use OCBNET::CSS3::Regex::Background;
+use OCBNET::CSS3::Regex::Numbers qw($re_length);
 
 ####################################################################################################
 # register longhand properties for backgrounds
@@ -20,9 +21,26 @@ use OCBNET::CSS3::Regex::Background;
 OCBNET::CSS3::Styles::register('background-color', $re_color, 'transparent', 1);
 OCBNET::CSS3::Styles::register('background-image', $re_bg_image, 'none', 1);
 OCBNET::CSS3::Styles::register('background-repeat', $re_bg_repeat, 'repeat', 1);
+OCBNET::CSS3::Styles::register('background-size-x', $re_length, undef, 1);
+OCBNET::CSS3::Styles::register('background-size-y', $re_length, undef, 1);
 OCBNET::CSS3::Styles::register('background-position-y', $re_bg_position_y, 'top', 1);
 OCBNET::CSS3::Styles::register('background-position-x', $re_bg_position_x, 'left', 1);
 OCBNET::CSS3::Styles::register('background-attachment', $re_bg_attachment, 'scroll', 1);
+
+####################################################################################################
+# register shorthand property for background-size
+####################################################################################################
+
+OCBNET::CSS3::Styles::register('background-size',
+{
+	'ordered' => [
+		# always needed
+		[ 'background-size-x' ],
+		# additional optional values
+		# may evaluate to other value
+		[ 'background-size-y', 'background-size-x' ]
+	],
+}, undef, 1);
 
 ####################################################################################################
 # register shorthand property for background-position

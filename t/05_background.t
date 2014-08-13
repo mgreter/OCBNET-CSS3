@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 61;
+use Test::More tests => 65;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $rv;
@@ -65,6 +65,13 @@ my $code = <<EOF;
 .test-08
 {
 	/* css-ref: test-07; */
+	background-size: 2px;
+}
+
+.test-09
+{
+	/* css-ref: test-07; */
+	background-size: 3px 4px;
 }
 
 EOF
@@ -141,3 +148,9 @@ is    ($css->child(6)->style('background-repeat'),       'repeat',        'parse
 is    ($css->child(6)->style('background-repeat-y', 0),  'repeat',        'parse background-repeat-y[0] (shorthand)');
 is    ($css->child(6)->style('background-repeat-y', 1),  0,               'parse background-repeat-y[1] (shorthand)');
 is    ($css->child(6)->style('background-repeat-y', 2),  0,               'parse background-repeat-y[2] (shorthand)');
+
+is    ($css->child(7)->style('background-size-x'),       '2px',           'parse background-size-y (shorthand)');
+is    ($css->child(7)->style('background-size-y'),       '2px',           'parse background-size-x (shorthand)');
+
+is    ($css->child(8)->style('background-size-x'),       '3px',           'parse background-size-x (shorthand)');
+is    ($css->child(8)->style('background-size-y'),       '4px',           'parse background-size-y (shorthand)');
