@@ -72,22 +72,14 @@ sub get
 	return undef if $key eq 'css-ref';
 	return undef if $key eq 'css-id';
 
-	# check each css references for given key
-	foreach my $id ($self->options->list('css-ref'))
-	{
-		# get the actual referenced dom node
-		my $ref = $self->root->{'ids'}->{$id};
-		# give error message if reference was not found
-		die "referenced id <$id> not found" unless $ref;
-		# resolve value on referenced block
-		# will itself try to resolve further
-		my $value = $ref->get($type, $key, $idx);
-		# only return if value is defined
-		return $value if defined $value;
-	}
+	# find the node that has the key
+	my $node = $self->find($type, $key);
 
-	# nothing found
-	return undef;
+	# return if nothing found
+	return undef unless $node;
+
+	# return results from getter
+	$node->get($type, $key, $idx);
 
 }
 # EO sub get
