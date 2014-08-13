@@ -50,15 +50,20 @@ sub fromPx
 {
 	# return undef if nothing passed
 	return unless defined $_[0];
-	# parse number via regular expression
-	$_[0] =~ m/($re_number)px/i ? $1 : $_[0];
+	# parse number via regular expression (pretty strict)
+	$_[0] =~ m/\A\s*($re_number)(?:px)?\s*\z/i ? $1 : undef;
 }
 
 # adds pixel unit
 #**************************************************************************************************
 sub toPx
 {
-	sprintf "%gpx", $_[0]
+	# parse via fromPx
+	my $px = fromPx($_[0]);
+	# check if input was valid
+	return undef unless defined $px;
+	# format correctly
+	sprintf "%gpx", $px
 }
 
 ####################################################################################################

@@ -83,6 +83,8 @@ sub unquot
 	# replace hexadecimal representation
 	# http://www.w3.org/International/questions/qa-escapes
 	$txt =~ s/\\([0-9A-F]{2,6})\s?/chr hex $1/eg;
+	$txt =~ s/\&\#x([0-9A-F]{2,6});\s?/chr hex $1/eg;
+	$txt =~ s/\&\#([0-9]{2,6});\s?/chr $1/eg;
 	# replace escape character
 	$txt =~ s/\\(.)/$1/g;
 	# return result
