@@ -55,14 +55,19 @@ sub ACTION_versionize {
                 $tag = $ARGV[$i+1]; last;
             }
         }
-        $tag = `git describe --abbrev=0 --always` unless $tag;
+        unless ($tag) {
+            $tag = `git describe --abbrev=0 --always`;
+            $tag =~ s/(?:\A\s+|\Av|\s+\z)//g;
+            unless ( $tag =~ m/(\d+\.\d+\.)(\d+)(?:\-|\z)/ )
+            { die "tag <$tag> invalid (\\d+.\\d+.\\d+)\n"; }
+            # increment patch level
+            else { $tag = $1 . ($2 + 1); }
+        }
         $tag =~ s/(?:\A\s+|\Av|\s+\z)//g;
         my $file_opt = { binmode => ':raw' };
         print "update *.pm with new version <$tag>\n";
         unless ( $tag =~ m/(\d+\.\d+\.)(\d+)(?:\-|\z)/ )
         { die "tag <$tag> invalid (\\d+.\\d+.\\d+)\n"; }
-        # increment patch level
-        else { $tag = $1 . ($2 + 1); }
         foreach my $filename (@files) {
             my $data = File::Slurp::read_file($filename, $file_opt);
             if ($data =~ s/$re_version/our \$VERSION = \'$tag\';/i) {
