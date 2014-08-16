@@ -14,12 +14,16 @@ use warnings;
 
 use OCBNET::CSS3::Regex::Base;
 use OCBNET::CSS3::Regex::Colors;
+use OCBNET::CSS3::Regex::Numbers;
 
 ####################################################################################################
-# register longhand properties for fonts
+# register longhand properties for common properties
+# these may be put into a specific module at some point
 ####################################################################################################
 
 OCBNET::CSS3::Styles::register('color', $re_color, 'inherit');
+OCBNET::CSS3::Styles::register('width', $re_length, 'auto');
+OCBNET::CSS3::Styles::register('height', $re_length, 'auto');
 
 ####################################################################################################
 ####################################################################################################
