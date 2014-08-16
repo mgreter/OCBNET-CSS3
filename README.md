@@ -38,6 +38,12 @@ Build test
 Build install
 ```
 
+Or, if [cpanminus](http://search.cpan.org/~miyagawa/App-cpanminus/) is available:
+
+```
+cpanm git://github.com/mgreter/OCBNET-CSS3.git
+```
+
 blessc
 ======
 
