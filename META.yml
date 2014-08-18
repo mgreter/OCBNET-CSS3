@@ -17,7 +17,7 @@ name: OCBNET-CSS3
 provides:
   OCBNET::CSS3:
     file: lib/OCBNET/CSS3.pm
-    version: v0.2.5
+    version: v0.2.6
   OCBNET::CSS3::DOM::Block:
     file: lib/OCBNET/CSS3/DOM/Block.pm
     version: v0.2.5
@@ -80,7 +80,7 @@ provides:
     version: v0.2.5
   OCBNET::CSS3::Regex::Colors:
     file: lib/OCBNET/CSS3/Regex/Colors.pm
-    version: v0.2.5
+    version: v0.2.6
   OCBNET::CSS3::Regex::Comments:
     file: lib/OCBNET/CSS3/Regex/Comments.pm
     version: v0.2.5
@@ -119,4 +119,4 @@ requires:
 resources:
   license: http://www.gnu.org/licenses/gpl-3.0.txt
   repository: https://github.com/mgreter/OCBNET-CSS3.git
-version: v0.2.5
+version: v0.2.6
