@@ -34,7 +34,7 @@
    "provides" : {
       "OCBNET::CSS3" : {
          "file" : "lib/OCBNET/CSS3.pm",
-         "version" : "v0.2.6"
+         "version" : "v0.2.7"
       },
       "OCBNET::CSS3::DOM::Block" : {
          "file" : "lib/OCBNET/CSS3/DOM/Block.pm",
@@ -114,7 +114,7 @@
       },
       "OCBNET::CSS3::Regex::Base" : {
          "file" : "lib/OCBNET/CSS3/Regex/Base.pm",
-         "version" : "v0.2.5"
+         "version" : "v0.2.7"
       },
       "OCBNET::CSS3::Regex::Colors" : {
          "file" : "lib/OCBNET/CSS3/Regex/Colors.pm",
@@ -176,5 +176,5 @@
          "web" : "https://github.com/mgreter/OCBNET-CSS3"
       }
    },
-   "version" : "v0.2.6"
+   "version" : "v0.2.7"
 }

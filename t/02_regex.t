@@ -4,12 +4,12 @@ use utf8;
 use strict;
 use warnings;
 
-use Test::More tests => 41;
+use Test::More tests => 50;
 BEGIN { use_ok('OCBNET::CSS3::Regex::Base') };
 BEGIN { use_ok('OCBNET::CSS3::Regex::Numbers') };
 BEGIN { use_ok('OCBNET::CSS3::Regex::Background') };
 
-use OCBNET::CSS3::Regex::Base qw(unquot unwrapUrl wrapUrl);
+use OCBNET::CSS3::Regex::Base qw(unwrapUrl wrapUrl $re_uri);
 
 is    (unwrapUrl('url("test.png")'),             'test.png',         'unwrapUrl test #1');
 is    (unwrapUrl('url(url("test.png"))'),        'test.png',         'unwrapUrl test #2');
@@ -67,4 +67,14 @@ is    (fromPosition('top'),                 '0',           'fromPosition test #5
 is    (fromPosition('bottom'),              'bottom',      'fromPosition test #6');
 is    (fromPosition('right'),               'right',       'fromPosition test #7');
 
+use OCBNET::CSS3::Regex::Base qw(unquot last_match last_index);
 
+is      ('url("test")' =~ $re_uri,      1,             'match uri test #1');
+is      (last_match,                    'test',        'test last match #1');
+is      (last_index,                    1,             'test last match #1');
+is      ("url('test')" =~ $re_uri,      1,             'match uri test #2');
+is      (last_match,                    'test',        'test last match #2');
+is      (last_index,                    2,             'test last match #2');
+is      ('url(test)' =~ $re_uri,        1,             'match uri test #3');
+is      (last_match,                    'test',        'test last match #3');
+is      (last_index,                    3,             'test last match #3');

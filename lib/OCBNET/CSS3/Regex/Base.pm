@@ -4,22 +4,23 @@
 ####################################################################################################
 package OCBNET::CSS3::Regex::Base;
 ####################################################################################################
-our $VERSION = '0.2.5';
+our $VERSION = '0.2.7';
 ####################################################################################################
 
 use strict;
 use warnings;
+our @EXPORT;
+our @EXPORT_OK;
 
 ####################################################################################################
 
 # load exporter and inherit from it
-BEGIN { use Exporter qw(); our @ISA = qw(Exporter); }
-
-# define our functions that can be exported
-BEGIN { our @EXPORT_OK = qw($re_url $re_uri $re_import unwrapUrl wrapUrl); }
+use Exporter qw(); our @ISA = qw(Exporter);
 
 # define our functions that will be exported
-BEGIN { our @EXPORT = qw($re_apo $re_quot $re_identifier $re_string $re_vendors unquot); }
+push @EXPORT, qw($re_apo $re_quot $re_identifier $re_string);
+push @EXPORT_OK, qw($re_uri $re_import last_match last_index);
+push @EXPORT_OK, qw($re_vendors $re_url unquot unwrapUrl wrapUrl);
 
 ####################################################################################################
 # base regular expressions
@@ -38,39 +39,73 @@ our $re_identifier = qr/\b[_a-zA-Z][_a-zA-Z0-9\-]*/s;
 #**************************************************************************************************
 our $re_string = qr/(?:$re_identifier|\"$re_quot\"|\'$re_apo\')/is;
 
-# regular expression to match any url
+# regular expression to match a wrapped url
 #**************************************************************************************************
 our $re_url = qr/url\((?:\'$re_apo\'|\"$re_quot\"|[^\)]*)\)/s;
 
-# match specific vendors
+# match vendors prefixes
 #**************************************************************************************************
 our $re_vendors = qr/(?:o|ms|moz|webkit)/is;
 
 ####################################################################################################
 
 # parse urls out of the css file
-# match will be saved as $+{uri}
+# only supports wrapped urls
 our $re_uri = qr/url\(\s*(?:
-	\s*\"(?!data:)(?<uri>$re_quot)\" |
-	\s*\'(?!data:)(?<uri>$re_apo)\' |
-	(?![\"\'])\s*(?!data:)(?<uri>[^\)]*)
+	\s*\"(?!data:)($re_quot)\" |
+	\s*\'(?!data:)($re_apo)\' |
+	(?![\"\'])\s*(?!data:)([^\)]*)
 )\s*\)/xi;
 
 ####################################################################################################
 
 # parse urls out of the css file
-# match will be saved as $+{uri}
+# also supports not wrapped urls
 our $re_import = qr/\@import\s*(?:
 	url\(\s*(?:
-		\s*\"(?!data:)(?<url>$re_quot)\" |
-		\s*\'(?!data:)(?<url>$re_apo)\' |
-		(?![\"\'])\s*(?!data:)(?<url>[^\)]*)
+		\s*\"(?!data:)($re_quot)\" |
+		\s*\'(?!data:)($re_apo)\' |
+		(?![\"\'])\s*(?!data:)([^\)]*)
 	)\) | (?:
-		\s*\"(?!data:)(?<uri>$re_quot)\" |
-		\s*\'(?!data:)(?<uri>$re_apo)\' |
-		(?![\"\'])\s*(?!data:)(?<uri>[^\s;]*)
+		\s*\"(?!data:)($re_quot)\" |
+		\s*\'(?!data:)($re_apo)\' |
+		(?![\"\'])\s*(?!data:)([^\s;]*)
 	))
 \s*;?/xi;
+
+####################################################################################################
+# regular expressions helpers
+####################################################################################################
+
+# return first defined match of last expression
+# helper for expressions that match alternatives
+sub last_match ()
+{
+	if (defined $1) { $1 }
+	elsif (defined $2) { $2 }
+	elsif (defined $3) { $3 }
+	elsif (defined $4) { $4 }
+	elsif (defined $5) { $5 }
+	elsif (defined $6) { $6 }
+	elsif (defined $7) { $7 }
+	elsif (defined $8) { $8 }
+	elsif (defined $9) { $9 }
+}
+
+# return index of first defined match of last expression
+# can be used to differentiate between match alternatives
+sub last_index ()
+{
+	if (defined $1) { 1 }
+	elsif (defined $2) { 2 }
+	elsif (defined $3) { 3 }
+	elsif (defined $4) { 4 }
+	elsif (defined $5) { 5 }
+	elsif (defined $6) { 6 }
+	elsif (defined $7) { 7 }
+	elsif (defined $8) { 8 }
+	elsif (defined $9) { 9 }
+}
 
 ####################################################################################################
 
