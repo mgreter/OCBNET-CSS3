@@ -4,7 +4,7 @@ use utf8;
 use strict;
 use warnings;
 
-use Test::More tests => 50;
+use Test::More tests => 53;
 BEGIN { use_ok('OCBNET::CSS3::Regex::Base') };
 BEGIN { use_ok('OCBNET::CSS3::Regex::Numbers') };
 BEGIN { use_ok('OCBNET::CSS3::Regex::Background') };
@@ -78,3 +78,9 @@ is      (last_index,                    2,             'test last match #2');
 is      ('url(test)' =~ $re_uri,        1,             'match uri test #3');
 is      (last_match,                    'test',        'test last match #3');
 is      (last_index,                    3,             'test last match #3');
+
+use OCBNET::CSS3::Regex::Selectors;
+my $re_pseudo = $OCBNET::CSS3::Regex::Selectors::re_pseudo;
+like (':hover', $re_pseudo, 'parse pseudo hover');
+like (':hover:focus', qr/^$re_pseudo+$/, 'parse multi pseudo');
+like (':nth-child(2n+1)', $re_pseudo, 'parse pseudo with brackets');

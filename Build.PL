@@ -5,11 +5,16 @@ use Module::Build;
 use Software::License;
 use Config;
 
+# defined version via env
+# will be overwritten by git
+my $version = $ENV{'VERSION'};
+
 if (-d ".git") {
     my ($dir, $manifest);
     open $manifest, ">", "MANIFEST" or die "MANIFEST: $!";
     print $manifest "MANIFEST\n";
     print $manifest `git ls-files`, "\n";
+    $version = `git describe --abbrev=4 --dirty --always --tags`;
 }
 
 my $class = Module::Build->subclass(

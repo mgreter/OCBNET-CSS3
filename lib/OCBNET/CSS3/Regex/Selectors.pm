@@ -6,7 +6,7 @@
 ####################################################################################################
 package OCBNET::CSS3::Regex::Selectors;
 ####################################################################################################
-our $VERSION = '0.2.5';
+our $VERSION = '0.2.6';
 ####################################################################################################
 
 use strict;
@@ -28,12 +28,26 @@ BEGIN { our @EXPORT_OK = qw($re_selector_rule $re_options); }
 use OCBNET::CSS3::Regex::Base;
 
 ####################################################################################################
+# use re 'eval';
+
+our $re_brace; $re_brace = qr/ \(
+	(?:
+		# quoted string
+		  \' (?:[^\'\\]+|\\.)* \'
+		| \" (?:[^\"\\]+|\\.)* \"
+		| \" (?:[^\"\\]+|\\.)* \"
+		# anything but a brace
+		| [^\(\)]*
+		# more brace groups (maybe not needed?)
+		# | (??{$OCBNET::CSS3::Regex::Selectors::re_brace})
+	)* \)
+/x;
 
 # create matchers for the various css selector types
 our $re_id = qr/\#$re_identifier/; # select single id
 our $re_tag = qr/(?:$re_identifier|\*)/; # select single tag
 our $re_class = qr/\.$re_identifier/; # select single class
-our $re_pseudo = qr/\:{1,2}$re_identifier/; # select single pseudo
+our $re_pseudo = qr/\:{1,2}$re_identifier(?:$re_brace)?/x; # select single pseudo
 
 ####################################################################################################
 
