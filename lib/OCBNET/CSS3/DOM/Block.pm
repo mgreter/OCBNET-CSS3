@@ -171,10 +171,13 @@ sub clean
 	$regexp = qr// unless defined $regexp;
 
 	# remove all background declarations now
+	# is still really need? what does it do?
 	@{$selector->{'children'}} = grep {
 		not ($_->{'key'} && $_->{'key'} =~ m/^\s*$regexp/is)
 	} @{$selector->{'children'}};
 
+	# call clean recursively on all children (optional?)
+	$_->clean($regexp) foreach @{$selector->{'children'}};
 
 }
 # EO sub clean

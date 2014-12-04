@@ -70,6 +70,10 @@ sub new
 
 ####################################################################################################
 
+# abort clean
+#**************************************************************************************************
+sub clean { }
+
 # get statistics object
 # ***************************************************************************************
 sub stats
@@ -80,8 +84,8 @@ sub stats
 	# add first object
 	my @objects = ($node);
 
-	# array to count items
-	my (@imports, @selectors);
+	# array to count (and store) the items
+	my (@imports, @selectors, @properties);
 
 	# process as long as we have objects
 	while (my $object = shift @objects)
@@ -93,12 +97,14 @@ sub stats
 			push @objects, @{$object->{'children'}};
 			push @imports, $object if $object->type eq 'import';
 			push @selectors, $object if $object->type eq 'selector';
+			push @properties, $object if $object->type eq 'property';
 		}
 	}
 
 	# split imports and selectors by commas
 	@imports = map { split /,/, $_->text } @imports;
 	@selectors = map { split /,/, $_->text } @selectors;
+	@properties = map { split /,/, $_->text } @properties;
 
 	# KB 262161 outlines the maximum number of stylesheets
 	# and rules supported by Internet Explorer 6 to 9.
@@ -106,7 +112,11 @@ sub stats
 	# - A sheet may @import up to 31 sheets
 	# - @import nesting supports up to 4 levels deep
 
-	return { 'imports' => \@imports, 'selectors' => \@selectors }
+	return {
+		'imports' => \@imports,
+		'selectors' => \@selectors,
+		'properties' => \@properties,
+	};
 
 }
 # EO stats
