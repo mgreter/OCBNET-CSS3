@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 33;
+use Test::More tests => 54;
 BEGIN { use_ok('OCBNET::CSS3') };
 
 my $css = OCBNET::CSS3::Stylesheet->new;
@@ -68,3 +68,28 @@ $rv = eval { $styles->set('foobar', '10px'); };
 
 is    ($rv,           undef,                    'invalid style type throws an errors');
 like  ($@,            qr/^unknown type/,        'invalid style type not implemented');
+
+# pertty senseless, but test anyway
+use_ok('OCBNET::CSS3::Regex::Base');
+my $re = qr/(A)?(B)?(C)?(D)?(E)?(F)?(G)?(H)?(I)?(J)?/;
+'A' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'A', 'last_match A');
+'B' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'B', 'last_match B');
+'C' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'C', 'last_match C');
+'D' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'D', 'last_match D');
+'E' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'E', 'last_match E');
+'F' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'F', 'last_match F');
+'G' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'G', 'last_match G');
+'H' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'H', 'last_match H');
+'I' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, 'I', 'last_match I');
+'J' =~ $re; is (OCBNET::CSS3::Regex::Base::last_match, '', 'last_match J');
+
+'A' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '1', 'last_index 1');
+'B' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '2', 'last_index 2');
+'C' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '3', 'last_index 3');
+'D' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '4', 'last_index 4');
+'E' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '5', 'last_index 5');
+'F' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '6', 'last_index 6');
+'G' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '7', 'last_index 7');
+'H' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '8', 'last_index 8');
+'I' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '9', 'last_index 9');
+'J' =~ $re; is (OCBNET::CSS3::Regex::Base::last_index, '', 'last_index 0');
